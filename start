@@ -1,0 +1,16 @@
+#!/usr/bin/python
+__author__ = "Theo Martos"
+
+import os
+import sys
+
+print("Compiling...")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar src/*.java")
+if(res == 0):
+    print("Starting...")
+    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar TwitterCrawler"
+    if(len(sys.argv) == 2):
+        cmd = cmd + " {}".format(sys.argv[1])
+    os.system(cmd)
+else:
+    print('Compilation failed, start aborded')
