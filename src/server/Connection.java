@@ -1,6 +1,8 @@
 /**
 *   @author Theo Martos
 *   @author Jules Perret
+*
+*   Classe qui représente les connection avec les indexeurs et qui permet de gérer les flux associés.
 **/
 
 import java.io.*;
@@ -14,13 +16,18 @@ public class Connection extends Thread
     private PrintWriter out;
     private boolean state;
 
-    private static int Index = 1;
+    private static int id = 0;
 
+    /**
+    *   Constructeur de la classe qui initialise le sockect, les flux réseaux et le garbage.
+    *   @param s    Le socket issu de la connexion avec le sokect serveur.
+    *   @param g    Le gargabe qui stocke les tweets
+    */
     public Connection(Socket s, Garbage g)
     {
         this.connection = s;
         this.tweets = g;
-        this.setName("Client-" + Index++);
+        this.setName("Client-" + id++);
         try
         {
             this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -30,12 +37,17 @@ public class Connection extends Thread
         {
             e.printStackTrace(System.err);
         }
-        this.state = true;
+        this.state = false;
     }
 
+    /**
+    *   Le thread écoute en permance l'indexeur lui envoie le prochain tweet à traiter.
+    *   Stop le thread s'il reçoit STOP.
+    */
     @Override
     public void run()
     {
+        this.state = true;
         try
         {
             String query = "";
@@ -64,11 +76,13 @@ public class Connection extends Thread
         }
         finally
         {
-            if(!connection.isClosed())
-                close();
+            close();
         }
     }
 
+    /**
+    *   Méthode pour fermer tous les flux et le socket pour mettre un terme à la connexion.
+    */
     public void close()
     {
         try
@@ -82,8 +96,15 @@ public class Connection extends Thread
         {
             e.printStackTrace(System.err);
         }
+        finally
+        {
+            state = false;
+        }
     }
 
+    /**
+    *   Méthode toString, pour afficher les informations de l'instance de Connection.
+    */
     @Override
     public String toString()
     {

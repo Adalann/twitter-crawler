@@ -1,6 +1,9 @@
 /**
 *   @author Theo Martos
 *   @author Jules Perret
+*
+*   Classe qui gère le serveur pour les connexions avec les indexeurs
+*   Initialise le serveur sur le port 2200
 **/
 
 import java.util.*;
@@ -15,6 +18,11 @@ public class CrawlerServer extends Thread
     private Garbage garbage;
     private boolean state;
 
+    /**
+    *   Constructeur de la classe, créé un socket serveur sur le port 2200, initialise une liste de Connexion,
+    *   récupère une instance de Garbage et met le boolean d'état à false
+    *   @param g    une instance de Garbage (celle du crawler)
+    */
     public CrawlerServer(Garbage g)
     {
         try
@@ -30,6 +38,10 @@ public class CrawlerServer extends Thread
         }
     }
 
+    /**
+    *   Méthode run de la class Thread, écoute en boucle les demandes de connexions,
+    *   ajoute les nouvelles instances de Connection dans la liste et les démarre
+    */
     @Override
     public void run()
     {
@@ -47,9 +59,13 @@ public class CrawlerServer extends Thread
                     e.printStackTrace(System.err);
             }
         }
+        close();
     }
 
-    public void closeClients()
+    /**
+    *   Ferme toutes les instances de Connection dans la liste et ferme le socket serveur
+    */
+    public void close()
     {
         try
         {
@@ -70,6 +86,9 @@ public class CrawlerServer extends Thread
         }
     }
 
+    /**
+    *   Affiche la liste de toutes les connexions au serveur
+    */
     public void listClients()
     {
         for(Connection c : clients)

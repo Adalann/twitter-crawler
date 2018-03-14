@@ -5,7 +5,7 @@ import os
 import sys
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar src/*.java")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar src/server/*.java")
 if(res == 0):
     print("Starting...")
     cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar TwitterCrawler"

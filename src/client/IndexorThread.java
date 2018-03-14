@@ -1,6 +1,8 @@
 /**
 *   @author Theo Martos
 *   @author Jules Perret
+*
+*   Classe qui gère la connxion avec le serveur et traite les JSONs reçus.
 **/
 
 import java.io.*;
@@ -9,9 +11,6 @@ import java.net.*;
 public class IndexorThread extends Thread
 {
     private String tweet;
-    private Emetteur transmitter;
-    private Content cont;
-    private Reference ref;
     private Socket soc;
     private boolean state;
     private int index;
@@ -19,14 +18,15 @@ public class IndexorThread extends Thread
     private BufferedReader in;
     private PrintWriter out;
 
-    public IndexorThread(Socket c)
+    /**
+    *   Constructeur de la classe, initialise les flux à partir du socket passé en paramètre.
+    *   @param s    Le socket de la connexions avec le serveur.
+    */
+    public IndexorThread(Socket s)
     {
         this.tweet = "";
-        this.transmitter = null;
-        this.cont = null;
-        this.ref = null;
-        this.soc = c;
-        this.state = true;
+        this.soc = s;
+        this.state = false;
         this.index = 0;
         try
         {
@@ -39,9 +39,13 @@ public class IndexorThread extends Thread
         }
     }
 
+    /**
+    *   Méthode run de la classe Thread, traite le JSON reçu du serveur.
+    */
     @Override
     public void run()
     {
+        state = true;
         while(state)
         {
             tweet = requestNextTweet();
@@ -57,6 +61,10 @@ public class IndexorThread extends Thread
         }
     }
 
+    /**
+    *   Méthode qui envoie une requête au serveur pour le prochain tweet JSON à traiter
+    *   @return     Le prochain tweet à traiter
+    */
     public synchronized String requestNextTweet()
     {
         String s = "";
@@ -74,6 +82,9 @@ public class IndexorThread extends Thread
         return s;
     }
 
+    /**
+    *   Méthode pour fermer tous les flux et le socket de la connexion.
+    */
     public synchronized void close()
     {
         try

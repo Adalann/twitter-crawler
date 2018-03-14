@@ -1,6 +1,8 @@
 /**
 *   @author Theo Martos
 *   @author Jules Perret
+*
+*   Classe Principale des modules indexeurs
 **/
 
 import java.util.*;
@@ -15,6 +17,7 @@ public class Indexor
 
     public static void main(String[] args)
     {
+        //  Déclaration des variables
         IndexorThread indexor = null;
         boolean state = true;
         Scanner sc = new Scanner(System.in);
@@ -27,12 +30,14 @@ public class Indexor
         {
             try
             {
+                //  Création du socket et du thread
                 ADDRESS = args[0];
                 Socket connection = new Socket(ADDRESS, PORT);
                 indexor = new IndexorThread(connection);
                 indexor.start();
                 String query;
 
+                //  Boucle pour gérer l'interface console de l'indexeur
                 while(state && !connection.isClosed())
                 {
                     System.out.print("> ");
@@ -40,17 +45,17 @@ public class Indexor
 
                     switch(query)
                     {
-                        case "help":
+                        case "help":  //  Affiche la liste des commandes et leurs descriptions
                         {
                             System.out.println("help : show this help\nindex : show the number of tweets processed by this indexor\nstop : stop this indexor");
                             break;
                         }
-                        case "index":
+                        case "index":  //  Affiche le nombre de tweets traités
                         {
                             System.out.println(indexor.getIndex());
                             break;
                         }
-                        case "stop":
+                        case "stop":  //  Stop le module
                         {
                             indexor.close();
                             state = false;
@@ -62,7 +67,7 @@ public class Indexor
                         }
                     }
                 }
-                if(connection.isClosed())
+                if(connection.isClosed() && state)
                     System.out.println("Connection closed by the Crawler Server.");
             }
             catch(IOException e)
