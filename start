@@ -5,10 +5,10 @@ import os
 import sys
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar src/server/*.java")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar src/server/*.java")
 if(res == 0):
     print("Starting...")
-    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar TwitterCrawler"
+    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar:../lib/gson.jar TwitterCrawler"
     if(len(sys.argv) == 2):
         cmd = cmd + " {}".format(sys.argv[1])
     os.system(cmd)

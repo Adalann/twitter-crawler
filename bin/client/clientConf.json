@@ -1,0 +1,6 @@
+{
+    "HOSTNAME_CRAWLER" : "localhost",
+    "PORT_CRAWLER" : 2200,
+    "HOSTNAME_HITS" : "localhost",
+    "PORT_HITS" : 2201,
+}

@@ -6,6 +6,8 @@
 *   Utilise l'API twitter4j en mode stream, hérite donc de la class StatusListener de l'API
 **/
 
+package server;
+
 import java.util.*;
 import twitter4j.*;
 
@@ -14,7 +16,6 @@ public class Crawler implements StatusListener
     private TwitterStream twitter;
     private Garbage tweets;
     private boolean state;
-
 
     /**
     *   Constructeur de la classe, créé une instance de Garbage et récupère l'instace Twitter de twitter4j

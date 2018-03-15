@@ -6,17 +6,19 @@
 *   Initialise le serveur sur le port 2200
 **/
 
+package server;
+
 import java.util.*;
 import java.io.*;
 import java.net.*;
 
 public class CrawlerServer extends Thread
 {
-    private static final int PORT = 2200;
     private ServerSocket server;
     private List<Connection> clients;
     private Garbage garbage;
     private boolean state;
+    private Configuration conf;
 
     /**
     *   Constructeur de la classe, créé un socket serveur sur le port 2200, initialise une liste de Connexion,
@@ -25,9 +27,10 @@ public class CrawlerServer extends Thread
     */
     public CrawlerServer(Garbage g)
     {
+        conf = ConfigFactory.getConf();
         try
         {
-            this.server = new ServerSocket(PORT);
+            this.server = new ServerSocket(conf.PORT);
             this.clients = new ArrayList<Connection>();
             this.garbage = g;
             this.state = true;
@@ -45,7 +48,7 @@ public class CrawlerServer extends Thread
     @Override
     public void run()
     {
-        while(state)
+        while(state || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT))
         {
             try
             {
@@ -59,7 +62,7 @@ public class CrawlerServer extends Thread
                     e.printStackTrace(System.err);
             }
         }
-        close();
+        // close();
     }
 
     /**

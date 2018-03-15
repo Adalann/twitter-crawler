@@ -1,4 +1,4 @@
-/**
+/**gson = new Gson();
 *   @author Theo Martos
 *   @author Jules Perret
 *
@@ -6,10 +6,12 @@
 *   Lance les différents Threads et gère l'interface console pour l'utilisateur.
 **/
 
+
 import java.util.*;
 import java.io.*;
 import java.net.*;
 import twitter4j.*;
+import server.*;
 
 public class TwitterCrawler
 {
@@ -21,13 +23,15 @@ public class TwitterCrawler
         Garbage tweets = crawler.getGarbage();
         CrawlerServer server = new CrawlerServer(tweets);
         Scanner sc = new Scanner(System.in);
+        Configuration conf = ConfigFactory.getConf();
+        System.out.println(conf.toString());
 
         // Déclaration du filtre sur lequel le crawler va chercher les tweets
-        String filter = "#PyeongChang2018";
+        // String filter = "#PyeongChang2018";
 
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");
-        crawler.start(filter);
+        crawler.start(conf.FILTER);
         System.out.println("Crawler started !");
 
         // Temporisation pour une raison d'interface
@@ -65,7 +69,7 @@ public class TwitterCrawler
                 }
                 case "startc": // Démarre le crawler avec le filtre définit plus haut
                 {
-                    crawler.start(filter);
+                    crawler.start(conf.FILTER);
                     try
                     {
                         Thread.sleep(5000);

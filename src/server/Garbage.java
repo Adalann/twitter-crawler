@@ -6,6 +6,8 @@
 *   pour les traiter
 **/
 
+package server;
+
 import java.util.*;
 import twitter4j.*;
 import twitter4j.json.*;

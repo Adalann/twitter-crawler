@@ -3,7 +3,9 @@
 *   @author Jules Perret
 *
 *   Classe qui représente les connection avec les indexeurs et qui permet de gérer les flux associés.
-**/
+*/
+
+package server;
 
 import java.io.*;
 import java.net.*;
