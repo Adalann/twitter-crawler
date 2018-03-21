@@ -49,12 +49,13 @@ public class IndexorThread extends Thread
         while(state)
         {
             tweet = requestNextTweet();
-            // System.out.println(tweet+"\n");
             try
             {
-                Thread.sleep(1500);
+                Gson gson = new GsonBuilder().create();
+                Tweet t = gson.fromJson(tweet, Tweet.class);
+                System.out.println(t);
             }
-            catch(InterruptedException e)
+            catch(UnsupportedEncodingException e)
             {
                 e.printStackTrace();
             }
