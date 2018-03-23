@@ -12,18 +12,21 @@ import java.util.*;
 import twitter4j.*;
 import twitter4j.json.*;
 import java.io.*;
+import util.*;
 
 public class Garbage
 {
     private List<String> tweets;
+    private Configuration conf;
     private int index;  // L'attribut index indique quel est le numéro dans la liste du prochain JSON dans la liste tweet
 
     /**
-    *   Constructeur de la classe, instancie une ArrayList vide et initie index à zero
+    *   Constructeur de la classe, instancie une ArrayList vide, récupère une instance de configuration et initie index à zero
     */
     public Garbage()
     {
         this.tweets = new ArrayList<String>();
+        this.conf = ConfigFactory.getConf();
         this.index = 0;
     }
 
@@ -112,11 +115,10 @@ public class Garbage
         try
         {
             System.out.print("Writing data (" + tweets.size() + " tweets)... ");
-            out = new PrintWriter(new BufferedWriter(new FileWriter("../output.data")));
+            out = new PrintWriter(new BufferedWriter(new FileWriter("../" + conf.SAVEFILE_NAME)));
             for(String s : tweets)
                 out.println(s + "\n");
             System.out.println("OK");
-
         }
         catch(IOException e)
         {

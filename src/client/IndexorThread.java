@@ -5,6 +5,8 @@
 *   Classe qui gère la connxion avec le serveur et traite les JSONs reçus.
 **/
 
+package client;
+
 import java.io.*;
 import java.net.*;
 import com.google.gson.*;

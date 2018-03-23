@@ -10,12 +10,14 @@ package server;
 
 import java.util.*;
 import twitter4j.*;
+import util.*;
 
 public class Crawler implements StatusListener
 {
     private TwitterStream twitter;
     private Garbage tweets;
     private boolean state;
+    private Configuration conf;
 
     /**
     *   Constructeur de la classe, créé une instance de Garbage et récupère l'instace Twitter de twitter4j
@@ -25,6 +27,7 @@ public class Crawler implements StatusListener
     {
         this.tweets = new Garbage();
         this.twitter = new TwitterStreamFactory().getInstance();
+        this.conf = ConfigFactory.getConf();
         state = false;
     }
 
@@ -88,6 +91,7 @@ public class Crawler implements StatusListener
         // System.out.println("@" + status.getUser().getName() + " : " + status.getText());
         synchronized(tweets)
         {
+            if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
             this.tweets.addStatusElement(status);
         }
     }

@@ -5,7 +5,7 @@
 *   Classe qui contient les constantes du programme.
 */
 
-package server;
+package util;
 
 public class Configuration
 {

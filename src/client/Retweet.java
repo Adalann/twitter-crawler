@@ -4,9 +4,7 @@ public class Retweet
     private String text;
 
     public String toString()
-        {
-            return "ID du Tweet: "+id_str+"text: "+text;
-        }
-
-
+    {
+        return "ID du Tweet: "+id_str+"text: "+text;
+    }
 }

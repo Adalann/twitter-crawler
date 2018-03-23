@@ -5,7 +5,7 @@
 *   Classe qui contient les constantes du programme.
 */
 
-package server;
+package util;
 
 import java.io.*;
 import com.google.gson.*;

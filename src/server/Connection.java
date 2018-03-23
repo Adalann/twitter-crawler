@@ -43,7 +43,7 @@ public class Connection extends Thread
     }
 
     /**
-    *   Le thread écoute en permance l'indexeur lui envoie le prochain tweet à traiter.
+    *   Le thread écoute en permance l'indexeur et lui envoie le prochain tweet à traiter.
     *   Stop le thread s'il reçoit STOP.
     */
     @Override

@@ -11,6 +11,7 @@ package server;
 import java.util.*;
 import java.io.*;
 import java.net.*;
+import util.*;
 
 public class CrawlerServer extends Thread
 {
@@ -28,12 +29,12 @@ public class CrawlerServer extends Thread
     public CrawlerServer(Garbage g)
     {
         conf = ConfigFactory.getConf();
+        this.clients = new ArrayList<Connection>();
         try
         {
             this.server = new ServerSocket(conf.PORT);
-            this.clients = new ArrayList<Connection>();
             this.garbage = g;
-            this.state = true;
+            this.state = false;
         }
         catch(IOException e)
         {
@@ -48,7 +49,8 @@ public class CrawlerServer extends Thread
     @Override
     public void run()
     {
-        while(state || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT))
+        state = true;
+        while(state && (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT))
         {
             try
             {
