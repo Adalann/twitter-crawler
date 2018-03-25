@@ -13,7 +13,7 @@ import common.Connection;
 
 public class ConnectionCrawler extends Connection
 {
-    private static final String CONF_CODE = "1000";
+    private static final int CONF_CODE = 0;
     private BufferedReader in;
     private PrintWriter out;
     private Garbage tweets;

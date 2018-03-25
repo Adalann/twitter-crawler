@@ -15,7 +15,7 @@ import common.*;
 
 public class CrawlerServer extends Thread
 {
-    private static final String CONF_CODE = "1000";
+    private static final int CONF_CODE = 0;
     private ServerSocket server;
     private List<ConnectionCrawler> clients;
     private Garbage garbage;
@@ -29,7 +29,7 @@ public class CrawlerServer extends Thread
     */
     public CrawlerServer(Garbage g)
     {
-        conf = ConfigFactory.getConf();
+        conf = ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<ConnectionCrawler>();
         try
         {

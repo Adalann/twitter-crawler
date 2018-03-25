@@ -9,16 +9,17 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 import twitter4j.*;
+import indexor.*;
 
 public class Indexor
 {
-    public static String ADDRESS;
-    public final static int PORT = 2200;
+    private static final int CONF_CODE = 1;
 
     public static void main(String[] args)
     {
         //  Déclaration des variables
         IndexorThread indexor = null;
+
         boolean state = true;
         Scanner sc = new Scanner(System.in);
 

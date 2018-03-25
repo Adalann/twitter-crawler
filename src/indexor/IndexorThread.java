@@ -5,7 +5,7 @@
 *   Classe qui gère la connxion avec le serveur et traite les JSONs reçus.
 **/
 
-package client;
+package indexor;
 
 import java.io.*;
 import java.net.*;
@@ -13,6 +13,7 @@ import com.google.gson.*;
 
 public class IndexorThread extends Thread
 {
+    private static final int CONF_CODE = 1;
     private String tweet;
     private Socket soc;
     private boolean state;

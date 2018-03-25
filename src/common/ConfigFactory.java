@@ -1,4 +1,4 @@
-/**
+/**String
 *   @author Theo Martos
 *   @author Jules Perret
 *
@@ -8,18 +8,21 @@
 package common;
 
 import java.io.*;
+import java.util.*;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 
 public class ConfigFactory
 {
-    public static Configuration getConf()
+    private static String[] CONF_PATH_TABLE = {"crawler/crawlerConf.json", "indexor/indexorConf.json", "analyser/analyserConf.json"};
+
+    public static Configuration getConf(int conf_code)
     {
         Gson gson = new Gson();
         JsonReader reader = null;
         try
         {
-            reader = new JsonReader(new FileReader("crawler/serverConf.json"));
+            reader = new JsonReader(new FileReader(CONF_PATH_TABLE[conf_code]));
         }
         catch(FileNotFoundException e)
         {

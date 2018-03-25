@@ -14,7 +14,7 @@ import common.*;
 
 public class TweetListener implements StatusListener
 {
-    private static final String CONF_CODE = "1000";
+    private static final int CONF_CODE = 0;
     private TwitterStream twitter;
     private Garbage tweets;
     private boolean state;
@@ -28,7 +28,7 @@ public class TweetListener implements StatusListener
     {
         this.tweets = new Garbage();
         this.twitter = new TwitterStreamFactory().getInstance();
-        this.conf = ConfigFactory.getConf();
+        this.conf = ConfigFactory.getConf(CONF_CODE);
         state = false;
     }
 

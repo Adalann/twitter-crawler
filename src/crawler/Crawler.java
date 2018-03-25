@@ -15,7 +15,7 @@ import common.*;
 
 public class Crawler
 {
-    private static final String CONF_CODE = "1000";
+    private static final int CONF_CODE = 0;
     public static void main(String[] args)
     {
         // Décalaration des variables et des Threads
