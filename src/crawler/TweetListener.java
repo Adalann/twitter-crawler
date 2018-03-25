@@ -6,14 +6,15 @@
 *   Utilise l'API twitter4j en mode stream, hérite donc de la class StatusListener de l'API
 **/
 
-package server;
+package crawler;
 
 import java.util.*;
 import twitter4j.*;
-import util.*;
+import common.*;
 
-public class Crawler implements StatusListener
+public class TweetListener implements StatusListener
 {
+    private static final String CONF_CODE = "1000";
     private TwitterStream twitter;
     private Garbage tweets;
     private boolean state;
@@ -23,7 +24,7 @@ public class Crawler implements StatusListener
     *   Constructeur de la classe, créé une instance de Garbage et récupère l'instace Twitter de twitter4j
     *   Le boolean state mit à false indique que le crawler est à l'arrêt.
     */
-    public Crawler()
+    public TweetListener()
     {
         this.tweets = new Garbage();
         this.twitter = new TwitterStreamFactory().getInstance();

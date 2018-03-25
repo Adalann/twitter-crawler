@@ -6,16 +6,17 @@
 *   pour les traiter
 **/
 
-package server;
+package crawler;
 
 import java.util.*;
 import twitter4j.*;
 import twitter4j.json.*;
 import java.io.*;
-import util.*;
+import common.*;
 
 public class Garbage
 {
+    private static final String CONF_CODE = "1000";
     private List<String> tweets;
     private Configuration conf;
     private int index;  // L'attribut index indique quel est le numéro dans la liste du prochain JSON dans la liste tweet

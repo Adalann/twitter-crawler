@@ -6,20 +6,21 @@
 *   Initialise le serveur sur le port 2200
 **/
 
-package server;
+package crawler;
 
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import util.*;
+import common.*;
 
 public class CrawlerServer extends Thread
 {
+    private static final String CONF_CODE = "1000";
     private ServerSocket server;
-    private List<Connection> clients;
+    private List<ConnectionCrawler> clients;
     private Garbage garbage;
-    private boolean state;
     private Configuration conf;
+    private boolean state;
 
     /**
     *   Constructeur de la classe, créé un socket serveur sur le port 2200, initialise une liste de Connexion,
@@ -29,7 +30,7 @@ public class CrawlerServer extends Thread
     public CrawlerServer(Garbage g)
     {
         conf = ConfigFactory.getConf();
-        this.clients = new ArrayList<Connection>();
+        this.clients = new ArrayList<ConnectionCrawler>();
         try
         {
             this.server = new ServerSocket(conf.PORT);
@@ -50,11 +51,11 @@ public class CrawlerServer extends Thread
     public void run()
     {
         state = true;
-        while(state && (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT))
+        while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
         {
             try
             {
-                Connection c = new Connection(server.accept(), garbage);
+                ConnectionCrawler c = new ConnectionCrawler(server.accept(), garbage);
                 clients.add(c);
                 c.start();
             }
@@ -74,7 +75,7 @@ public class CrawlerServer extends Thread
     {
         try
         {
-            for(Connection c : clients)
+            for(ConnectionCrawler c : clients)
             {
                 c.close();
             }
@@ -92,11 +93,11 @@ public class CrawlerServer extends Thread
     }
 
     /**
-    *   Affiche la liste de toutes les connexions au serveur
+    *   Affiche la liste de toutes les connexions au serveur #DEBUG_PURPOSE
     */
     public void listClients()
     {
-        for(Connection c : clients)
+        for(ConnectionCrawler c : clients)
         {
             System.out.println(c.toString());
         }

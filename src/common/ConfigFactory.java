@@ -5,7 +5,7 @@
 *   Classe qui contient les constantes du programme.
 */
 
-package util;
+package common;
 
 import java.io.*;
 import com.google.gson.*;
@@ -19,7 +19,7 @@ public class ConfigFactory
         JsonReader reader = null;
         try
         {
-            reader = new JsonReader(new FileReader("server/serverConf.json"));
+            reader = new JsonReader(new FileReader("crawler/serverConf.json"));
         }
         catch(FileNotFoundException e)
         {

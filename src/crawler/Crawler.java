@@ -10,20 +10,21 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 import twitter4j.*;
-import server.*;
-import util.*;
+import crawler.*;
+import common.*;
 
-public class TwitterCrawler
+public class Crawler
 {
+    private static final String CONF_CODE = "1000";
     public static void main(String[] args)
     {
         // Décalaration des variables et des Threads
         boolean state = true;
-        Crawler crawler = new Crawler();
+        TweetListener crawler = new TweetListener();
         Garbage tweets = crawler.getGarbage();
         CrawlerServer server = new CrawlerServer(tweets);
         Scanner sc = new Scanner(System.in);
-        Configuration conf = ConfigFactory.getConf();
+        Configuration conf = ConfigFactory.getConf(CONF_CODE);
 
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");

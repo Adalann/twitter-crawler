@@ -5,18 +5,18 @@
 *   Classe qui représente les connection avec les indexeurs et qui permet de gérer les flux associés.
 */
 
-package server;
+package crawler;
 
 import java.io.*;
 import java.net.*;
+import common.Connection;
 
-public class Connection extends Thread
+public class ConnectionCrawler extends Connection
 {
-    private Socket connection;
-    private Garbage tweets;
+    private static final String CONF_CODE = "1000";
     private BufferedReader in;
     private PrintWriter out;
-    private boolean state;
+    private Garbage tweets;
 
     private static int id = 0;
 
@@ -25,7 +25,7 @@ public class Connection extends Thread
     *   @param s    Le socket issu de la connexion avec le sokect serveur.
     *   @param g    Le gargabe qui stocke les tweets
     */
-    public Connection(Socket s, Garbage g)
+    public ConnectionCrawler(Socket s, Garbage g)
     {
         this.connection = s;
         this.tweets = g;
@@ -85,6 +85,7 @@ public class Connection extends Thread
     /**
     *   Méthode pour fermer tous les flux et le socket pour mettre un terme à la connexion.
     */
+    @Override
     public void close()
     {
         try
