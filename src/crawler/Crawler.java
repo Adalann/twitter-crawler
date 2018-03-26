@@ -24,7 +24,7 @@ public class Crawler
         Garbage tweets = crawler.getGarbage();
         CrawlerServer server = new CrawlerServer(tweets);
         Scanner sc = new Scanner(System.in);
-        Configuration conf = ConfigFactory.getConf(CONF_CODE);
+        ConfigurationCrawler conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
 
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");

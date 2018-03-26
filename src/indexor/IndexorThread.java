@@ -10,6 +10,7 @@ package indexor;
 import java.io.*;
 import java.net.*;
 import com.google.gson.*;
+import common.*;
 
 public class IndexorThread extends Thread
 {
@@ -53,16 +54,16 @@ public class IndexorThread extends Thread
         while(state)
         {
             tweet = requestNextTweet();
-            try
-            {
+            // try
+            // {
                 Gson gson = new GsonBuilder().create();
                 Tweet t = gson.fromJson(tweet, Tweet.class);
                 System.out.println(t);
-            }
-            catch(UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-            }
+            // }
+            // catch(UnsupportedEncodingException e)
+            // {
+                // e.printStackTrace();
+            // }
         }
     }
 
@@ -107,5 +108,10 @@ public class IndexorThread extends Thread
         {
             this.state = false;
         }
+    }
+
+    public int getIndex()
+    {
+        return index;
     }
 }

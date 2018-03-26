@@ -15,7 +15,7 @@ import common.*;
 public class Indexor
 {
     private static final int CONF_CODE = 1;
-    private static ConfigurationIndexor conf = ConfigFactory.getConf(CONF_CODE);
+    private static ConfigurationIndexor conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
 
     public static void main(String[] args)
     {

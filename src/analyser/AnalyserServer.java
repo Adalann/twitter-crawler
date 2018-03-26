@@ -18,12 +18,12 @@ public class AnalyserServer extends Thread
     private ServerSocket server;
     private List<Connection> clients;
     //private "classe qui encapsule les hashtables"
-    private Configuration conf;
+    private ConfigurationAnalyser conf;
     private boolean state;
 
     public AnalyserServer()
     {
-        this.conf = ConfigFactory.getConf(CONF_CODE);
+        this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<Connection>();
         try
         {

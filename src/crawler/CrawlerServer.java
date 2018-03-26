@@ -19,7 +19,7 @@ public class CrawlerServer extends Thread
     private ServerSocket server;
     private List<ConnectionCrawler> clients;
     private Garbage garbage;
-    private Configuration conf;
+    private ConfigurationCrawler conf;
     private boolean state;
 
     /**
@@ -29,7 +29,7 @@ public class CrawlerServer extends Thread
     */
     public CrawlerServer(Garbage g)
     {
-        conf = ConfigFactory.getConf(CONF_CODE);
+        conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<ConnectionCrawler>();
         try
         {

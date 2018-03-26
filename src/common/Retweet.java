@@ -7,6 +7,8 @@
 
 package common;
 
+import java.io.Serializable;
+
 public class Retweet implements Serializable
 {
     private static final long serialVersionUID = 41111l;
@@ -24,10 +26,4 @@ public class Retweet implements Serializable
         this.retweet_count = 0;
         this.quote_count = 0;
     }
-
-    public String toString()
-    {
-        return "\n ID du Tweet: "+id_str+"text: "+text+" \n \n RT:"+retweeted_status.toString();
-    }
-
 }

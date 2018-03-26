@@ -18,7 +18,7 @@ public class TweetListener implements StatusListener
     private TwitterStream twitter;
     private Garbage tweets;
     private boolean state;
-    private Configuration conf;
+    private ConfigurationCrawler conf;
 
     /**
     *   Constructeur de la classe, créé une instance de Garbage et récupère l'instace Twitter de twitter4j
@@ -28,7 +28,7 @@ public class TweetListener implements StatusListener
     {
         this.tweets = new Garbage();
         this.twitter = new TwitterStreamFactory().getInstance();
-        this.conf = ConfigFactory.getConf(CONF_CODE);
+        this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         state = false;
     }
 
