@@ -7,8 +7,9 @@
 
 package common;
 
-public class User
+public class User implements Serializable
 {
+    private static final long serialVersionUID = 42222l;
     public final String id_str;
     public final String lang;
     public final boolean verified;

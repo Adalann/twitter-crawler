@@ -14,6 +14,7 @@ import common.*;
 
 public class AnalyserServer extends Thread
 {
+    public static final int CONF_CODE = 2;
     private ServerSocket server;
     private List<Connection> clients;
     //private "classe qui encapsule les hashtables"
@@ -22,7 +23,7 @@ public class AnalyserServer extends Thread
 
     public AnalyserServer()
     {
-        this.conf = ConfigFactory.getConf();
+        this.conf = ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<Connection>();
         try
         {

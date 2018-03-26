@@ -7,7 +7,7 @@
 
 package common;
 
-public class ConfigurationIndexor
+public class ConfigurationIndexor extends Configuration
 {
     public final String HOSTNAME_CRAWLER;
     public final int PORT_CRAWLER;
@@ -25,6 +25,6 @@ public class ConfigurationIndexor
     @Override
     public String toString()
     {
-
+        return "Crawler hostname : " + HOSTNAME_CRAWLER + "\n\tCarwler port : " + PORT_CRAWLER + "\n\tAnalyser hostname : " + HOSTNAME_ANALYSER + "\n\tAnalyser port : " + PORT_ANALYSER;
     }
 }

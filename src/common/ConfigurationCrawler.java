@@ -7,7 +7,7 @@
 
 package common;
 
-public class ConfigurationCrawler
+public class ConfigurationCrawler extends Configuration
 {
     public final int PORT;
     public final int CLIENT_LIMIT;

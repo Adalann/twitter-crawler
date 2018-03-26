@@ -4,10 +4,10 @@ __author__ = "Theo Martos"
 import os
 
 print("Compiling...")
-res = os.system("javac -d ./bin/client -cp :./lib/twitter4j.jar src/client/*.java")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./src src/client/*.java")
 if(res == 0):
     print("Starting...")
-    cmd = "cd ./bin/client && java -cp :../lib/twitter4j.jar Indexor adalannvps.fr"
+    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../src Indexor"
     os.system(cmd)
 else:
     print('Compilation failed, start aborded')

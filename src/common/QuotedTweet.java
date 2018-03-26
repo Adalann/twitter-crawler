@@ -7,28 +7,23 @@
 
 package common;
 
-public class Tweet implements Serializable
+public class QuotedTweet implements Serializable
 {
-    private static final long serialVersionUID = 40000l;
+    private static final long serialVersionUID = 43333l;
     public final String id_str;
     public final String text;
     public final String created_at;
-    public final Retweet retweeted_status;
     public final int retweet_count;
-    public final QuotedTweet quoted_status;
     public final int quote_count;
 
-    public Tweet()
+    public QuotedTweet()
     {
         this.id_str = "";
         this.text = "";
         this.created_at = "";
-        this.retweeted_status = null;
         this.retweet_count = 0;
-        this.quoted_status = null;
         this.quote_count = 0;
     }
-
 
     public String toString()
     {

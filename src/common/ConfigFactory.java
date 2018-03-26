@@ -28,7 +28,25 @@ public class ConfigFactory
         {
             e.printStackTrace();
         }
-        Configuration conf = gson.fromJson(reader, Configuration.class);
+        Configuration conf = null;
+        switch(conf_code)
+        {
+            case 1:
+            {
+                conf = gson.fromJson(reader, ConfigurationCrawler.class);
+                break;
+            }
+            case 2:
+            {
+                conf = gson.fromJson(reader, ConfigurationIndexor.class);
+                break;
+            }
+            case 3:
+            {
+                conf = gson.fromJson(reader, ConfigurationAnalyser.class);
+                break;
+            }
+        }
         return conf;
     }
 }
