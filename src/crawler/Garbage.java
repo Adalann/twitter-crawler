@@ -14,7 +14,7 @@ import twitter4j.json.*;
 import java.io.*;
 import common.*;
 
-public class Garbage
+class Garbage
 {
     private static final int CONF_CODE = 0;
     private List<String> tweets;

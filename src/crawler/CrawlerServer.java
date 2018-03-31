@@ -13,7 +13,7 @@ import java.io.*;
 import java.net.*;
 import common.*;
 
-public class CrawlerServer extends Thread
+class CrawlerServer extends Thread
 {
     private static final int CONF_CODE = 0;
     private ServerSocket server;

@@ -44,14 +44,14 @@ class IndexorThread extends Thread
             e.printStackTrace(System.err);
         }
         this.socketAnalyser = sA;
-        // try
-        // {
-        //     outAnalyser = new ObjectOutputStream(socketAnalyser.getOutputStream());
-        // }
-        // catch(IOException e)
-        // {
-        //     e.printStackTrace(System.err);
-        // }
+        try
+        {
+            outAnalyser = new ObjectOutputStream(socketAnalyser.getOutputStream());
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(System.err);
+        }
         this.state = false;
         this.index = 0;
     }
@@ -62,6 +62,14 @@ class IndexorThread extends Thread
     @Override
     public void run()
     {
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException e)
+        {
+            e.printStackTrace();
+        }
         state = true;
         while(state)
         {
@@ -69,7 +77,23 @@ class IndexorThread extends Thread
 
             Gson gson = new GsonBuilder().create();
             Tweet tweet = gson.fromJson(tweetString, Tweet.class);
-            System.out.println("JOSN : " + tweetString);
+            try
+            {
+                outAnalyser.writeObject(tweet);
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println("JOSN : " + tweetString + "\n");
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 

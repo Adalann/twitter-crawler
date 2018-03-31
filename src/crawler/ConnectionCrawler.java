@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.*;
 import common.Connection;
 
-public class ConnectionCrawler extends Connection
+class ConnectionCrawler extends Connection
 {
     private static final int CONF_CODE = 0;
     private BufferedReader in;
@@ -58,7 +58,7 @@ public class ConnectionCrawler extends Connection
                 query = in.readLine();
                 if (query == null)
                 {
-                    System.out.println("Connection close by the client");
+                    System.out.println("Connection close by " + this.getName());
                     break;
                 }
                 switch(query)

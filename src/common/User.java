@@ -29,4 +29,9 @@ public class User implements Serializable
         this.name = "";
     }
 
+    @Override
+    public String toString()
+    {
+        return "{id=" + id_str + ", lang=" + lang + ", is_verified=" + verified + ", followers_count=" + followers_count + ", screen_name=" + screen_name + ", name=" + name +"}";
+    }
 }

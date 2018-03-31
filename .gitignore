@@ -22,3 +22,5 @@ twitter4j.properties
 .ropeproject
 src.old
 .ftpconfig
+.ftpconfig-vps
+.ftpconfig-pi

@@ -12,7 +12,7 @@ import java.util.*;
 import twitter4j.*;
 import common.*;
 
-public class TweetListener implements StatusListener
+class TweetListener implements StatusListener
 {
     private static final int CONF_CODE = 0;
     private TwitterStream twitter;

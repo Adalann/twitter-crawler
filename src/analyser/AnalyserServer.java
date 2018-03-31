@@ -12,11 +12,11 @@ import java.io.*;
 import java.net.*;
 import common.*;
 
-public class AnalyserServer extends Thread
+class AnalyserServer extends Thread
 {
-    public static final int CONF_CODE = 2;
+    private static final int CONF_CODE = 2;
     private ServerSocket server;
-    private List<Connection> clients;
+    private List<ConnectionAnalyser> clients;
     //private "classe qui encapsule les hashtables"
     private ConfigurationAnalyser conf;
     private boolean state;
@@ -24,7 +24,7 @@ public class AnalyserServer extends Thread
     public AnalyserServer()
     {
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
-        this.clients = new ArrayList<Connection>();
+        this.clients = new ArrayList<ConnectionAnalyser>();
         try
         {
             this.server = new ServerSocket(conf.PORT);
@@ -44,7 +44,7 @@ public class AnalyserServer extends Thread
         {
             try
             {
-                Connection client = new Connection(server.accept());
+                ConnectionAnalyser client = new ConnectionAnalyser(server.accept());
                 clients.add(client);
                 client.start();
             }
@@ -60,7 +60,7 @@ public class AnalyserServer extends Thread
     {
         try
         {
-            for(Connection c : clients)
+            for(ConnectionAnalyser c : clients)
                 c.close();
             if(!server.isClosed())
                 server.close();
