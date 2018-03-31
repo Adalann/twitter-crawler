@@ -56,6 +56,11 @@ public class ConnectionCrawler extends Connection
             while(state)
             {
                 query = in.readLine();
+                if (query == null)
+                {
+                    System.out.println("Connection close by the client");
+                    break;
+                }
                 switch(query)
                 {
                     case "NEXT":
@@ -73,9 +78,8 @@ public class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
-            // if(state)
-            //     e.printStackTrace(System.err);
-            System.out.println("Connection close by the client");
+            if(state)
+                e.printStackTrace(System.err);
         }
         finally
         {
