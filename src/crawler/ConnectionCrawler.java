@@ -73,8 +73,9 @@ public class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
-            if(state)
-                e.printStackTrace(System.err);
+            // if(state)
+            //     e.printStackTrace(System.err);
+            System.out.println("Connection close by the client");
         }
         finally
         {

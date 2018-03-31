@@ -31,17 +31,17 @@ public class ConfigFactory
         Configuration conf = null;
         switch(conf_code)
         {
-            case 1:
+            case 0:
             {
                 conf = gson.fromJson(reader, ConfigurationCrawler.class);
                 break;
             }
-            case 2:
+            case 1:
             {
                 conf = gson.fromJson(reader, ConfigurationIndexor.class);
                 break;
             }
-            case 3:
+            case 2:
             {
                 conf = gson.fromJson(reader, ConfigurationAnalyser.class);
                 break;

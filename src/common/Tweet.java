@@ -30,11 +30,4 @@ public class Tweet implements Serializable
         this.quoted_status = null;
         this.quote_count = 0;
     }
-
-
-    public String toString()
-    {
-        return "\n ID du Tweet: "+id_str+"text: "+text+" \n \n RT:"+retweeted_status.toString();
-    }
-
 }

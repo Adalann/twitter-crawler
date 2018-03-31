@@ -4,10 +4,9 @@ __author__ = "Theo Martos"
 import os
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./src src/client/*.java")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/gson.jar:./src ./src/RunIndexor.java")
 if(res == 0):
     print("Starting...")
-    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../src Indexor"
-    os.system(cmd)
+    os.system("cd ./bin && java -cp :../lib/twitter4j.jar:../lib/gson.jar:../src RunIndexor")
 else:
     print('Compilation failed, start aborded')

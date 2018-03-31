@@ -2,5 +2,5 @@
     "HOSTNAME_CRAWLER" : "localhost",
     "PORT_CRAWLER" : 2200,
     "HOSTNAME_ANALYSER" : "localhost",
-    "PORT_ANALYSER" : 2201,
+    "PORT_ANALYSER" : 2201
 }

@@ -12,36 +12,48 @@ import java.net.*;
 import com.google.gson.*;
 import common.*;
 
-public class IndexorThread extends Thread
+class IndexorThread extends Thread
 {
     private static final int CONF_CODE = 1;
-    private String tweet;
-    private Socket soc;
+    private String tweetString;
+    private Socket socketCrawler;
+    private Socket socketAnalyser;
     private boolean state;
     private int index;
 
-    private BufferedReader in;
-    private PrintWriter out;
+    private BufferedReader inCrawler;
+    private PrintWriter outCrawler;
+
+    private ObjectOutputStream outAnalyser;
 
     /**
     *   Constructeur de la classe, initialise les flux à partir du socket passé en paramètre.
     *   @param s    Le socket de la connexions avec le serveur.
     */
-    public IndexorThread(Socket s)
+    public IndexorThread(Socket sC, Socket sA)
     {
-        this.tweet = "";
-        this.soc = s;
-        this.state = false;
-        this.index = 0;
+        this.tweetString = "";
+        this.socketCrawler = sC;
         try
         {
-            in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(soc.getOutputStream())), true);
+            inCrawler = new BufferedReader(new InputStreamReader(socketCrawler.getInputStream()));
+            outCrawler = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCrawler.getOutputStream())), true);
         }
         catch(IOException e)
         {
             e.printStackTrace(System.err);
         }
+        this.socketAnalyser = sA;
+        // try
+        // {
+        //     outAnalyser = new ObjectOutputStream(socketAnalyser.getOutputStream());
+        // }
+        // catch(IOException e)
+        // {
+        //     e.printStackTrace(System.err);
+        // }
+        this.state = false;
+        this.index = 0;
     }
 
     /**
@@ -53,17 +65,11 @@ public class IndexorThread extends Thread
         state = true;
         while(state)
         {
-            tweet = requestNextTweet();
-            // try
-            // {
-                Gson gson = new GsonBuilder().create();
-                Tweet t = gson.fromJson(tweet, Tweet.class);
-                System.out.println(t);
-            // }
-            // catch(UnsupportedEncodingException e)
-            // {
-                // e.printStackTrace();
-            // }
+            tweetString = requestNextTweet();
+
+            Gson gson = new GsonBuilder().create();
+            Tweet tweet = gson.fromJson(tweetString, Tweet.class);
+            System.out.println("JOSN : " + tweetString);
         }
     }
 
@@ -76,8 +82,8 @@ public class IndexorThread extends Thread
         String s = "";
         try
         {
-            out.println("NEXT");
-            s = in.readLine();
+            outCrawler.println("NEXT");
+            s = inCrawler.readLine();
             if(!s.equals(""))
                 index++;
         }
@@ -95,10 +101,10 @@ public class IndexorThread extends Thread
     {
         try
         {
-            out.println("STOP");
-            in.close();
-            out.close();
-            soc.close();
+            outCrawler.println("STOP");
+            inCrawler.close();
+            outCrawler.close();
+            socketCrawler.close();
         }
         catch(IOException e)
         {
