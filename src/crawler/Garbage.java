@@ -19,7 +19,7 @@ class Garbage
     private static final int CONF_CODE = 0;
     private List<String> tweets;
     private ConfigurationCrawler conf;
-    private int index;  // L'attribut index indique quel est le numéro dans la liste du prochain JSON dans la liste tweet
+    private int index;  // L'attribut index indique quel est le numéro dans la liste du prochain JSON à traiter dans la liste tweet
 
     /**
     *   Constructeur de la classe, instancie une ArrayList vide, récupère une instance de configuration et initie index à zero
@@ -28,7 +28,6 @@ class Garbage
     {
         this.tweets = new ArrayList<String>();
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
-
         this.index = 0;
     }
 
@@ -120,7 +119,32 @@ class Garbage
             out = new PrintWriter(new BufferedWriter(new FileWriter("../" + conf.SAVEFILE_NAME)));
             for(String s : tweets)
                 out.println(s + "\n");
-            System.out.println("OK");
+            System.out.println(conf.ANSI_GREEN + "OK" + conf.ANSI_RESET);
+            out.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void restore()
+    {
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("../" + conf.RESTOREFILE_NAME));
+            String line = "";
+            while((line = in.readLine()) != null)
+            {
+                if(line.startsWith("{"))
+                    this.addStringElement(line);
+            }
+            System.out.println(conf.ANSI_GREEN + "Restored " + tweets.size() + " element(s)" + conf.ANSI_RESET);
+            in.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println(conf.ANSI_RED + "\nThe restore file " + conf.RESTOREFILE_NAME + " was not found.\nRestoration failed !\n" + conf.ANSI_RESET);
         }
         catch(IOException e)
         {

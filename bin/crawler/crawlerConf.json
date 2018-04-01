@@ -3,5 +3,7 @@
     "CLIENT_LIMIT" : -1,
     "FILTER" : "#ThursdayThoughts",
     "TWEET_LIMIT" : -1,
-    "SAVEFILE_NAME" : "output.data"
+    "SAVEFILE_NAME" : "output.data",
+    "RESTOREFILE_NAME" : "test.data",
+    "RESTORE_ON_START" : true
 }

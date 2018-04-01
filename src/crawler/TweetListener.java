@@ -24,9 +24,9 @@ class TweetListener implements StatusListener
     *   Constructeur de la classe, créé une instance de Garbage et récupère l'instace Twitter de twitter4j
     *   Le boolean state mit à false indique que le crawler est à l'arrêt.
     */
-    public TweetListener()
+    public TweetListener(Garbage g)
     {
-        this.tweets = new Garbage();
+        this.tweets = g;
         this.twitter = new TwitterStreamFactory().getInstance();
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         state = false;
@@ -51,7 +51,7 @@ class TweetListener implements StatusListener
         this.twitter.shutdown();
         this.twitter.removeListener(this);
         state = false;
-        System.out.println("Done, writing data (" + tweets.size() + " tweets)");
+        System.out.println(conf.ANSI_GREEN + "Done, writing data (" + tweets.size() + " tweets)" + conf.ANSI_RESET);
         tweets.save();
     }
 
@@ -89,7 +89,6 @@ class TweetListener implements StatusListener
     @Override
     public void onStatus(Status status)
     {
-        // System.out.println("@" + status.getUser().getName() + " : " + status.getText());
         synchronized(tweets)
         {
             if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)

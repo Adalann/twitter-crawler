@@ -2,15 +2,11 @@
 __author__ = "Theo Martos"
 
 import os
-import sys
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar:./src src/crawler/*.java")
+res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar:./src ./src/RunCrawler.java")
 if(res == 0):
     print("Starting...")
-    cmd = "cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar:../lib/gson.jar:../src Crawler"
-    if(len(sys.argv) == 2):
-        cmd = cmd + " {}".format(sys.argv[1])
-    os.system(cmd)
+    os.system("cd ./bin && java -cp :../lib/twitter4j.jar:../lib/twitter4j-stream.jar:../lib/gson.jar:../src RunCrawler")
 else:
     print('Compilation failed, start aborded')
