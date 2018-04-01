@@ -32,24 +32,24 @@ public class Indexor extends Thread
         try
         {
             this.connectionCrawler = new Socket(conf.HOSTNAME_CRAWLER, conf.PORT_CRAWLER);
-            System.out.println("Connection to the crawler established.");
+            System.out.println(conf.ANSI_GREEN + "Connection to the crawler established." + conf.ANSI_RESET);
         }
         catch(IOException e)
         {
-            e.printStackTrace();
-            System.out.println("Impossible to reach the crawler, check your connection and your configuration");
+            e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "Impossible to reach the crawler, check your connection and your configuration" + conf.ANSI_RESET);
             this.connectionCrawler = null;
         }
 
         try
         {
             this.connectionAnalyser = new Socket(conf.HOSTNAME_ANALYSER, conf.PORT_ANALYSER);
-            System.out.println("Connection to the analyser established.");
+            System.out.println(conf.ANSI_GREEN + "Connection to the analyser established." + conf.ANSI_RESET);
         }
         catch(IOException e)
         {
-            e.printStackTrace();
-            System.out.println("Impossible to reach the analyser, check your connection and your configuration");
+            e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "Impossible to reach the analyser, check your connection and your configuration" + conf.ANSI_RESET);
             this.connectionAnalyser = null;
         }
 
@@ -117,7 +117,7 @@ public class Indexor extends Thread
         catch(IOException e)
         {
             System.out.println("Error trying to close the sockets.");
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {

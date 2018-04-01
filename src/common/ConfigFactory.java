@@ -15,38 +15,44 @@ import com.google.gson.stream.JsonReader;
 public class ConfigFactory
 {
     private static String[] CONF_PATH_TABLE = {"crawler/crawlerConf.json", "indexor/indexorConf.json", "analyser/analyserConf.json"};
+    private static Configuration confInstance = null;
 
     public static Configuration getConf(int conf_code)
     {
-        Gson gson = new Gson();
-        JsonReader reader = null;
-        try
+        if(confInstance == null)
         {
-            reader = new JsonReader(new FileReader(CONF_PATH_TABLE[conf_code]));
-        }
-        catch(FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        Configuration conf = null;
-        switch(conf_code)
-        {
-            case 0:
+            Gson gson = new Gson();
+            JsonReader reader = null;
+            try
             {
-                conf = gson.fromJson(reader, ConfigurationCrawler.class);
-                break;
+                reader = new JsonReader(new FileReader(CONF_PATH_TABLE[conf_code]));
             }
-            case 1:
+            catch(FileNotFoundException e)
             {
-                conf = gson.fromJson(reader, ConfigurationIndexor.class);
-                break;
+                e.printStackTrace();
             }
-            case 2:
+            Configuration conf = null;
+            switch(conf_code)
             {
-                conf = gson.fromJson(reader, ConfigurationAnalyser.class);
-                break;
+                case 0:
+                {
+                    conf = gson.fromJson(reader, ConfigurationCrawler.class);
+                    break;
+                }
+                case 1:
+                {
+                    conf = gson.fromJson(reader, ConfigurationIndexor.class);
+                    break;
+                }
+                case 2:
+                {
+                    conf = gson.fromJson(reader, ConfigurationAnalyser.class);
+                    break;
+                }
             }
+            return conf;
         }
-        return conf;
+        else
+            return confInstance;
     }
 }

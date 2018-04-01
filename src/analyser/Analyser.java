@@ -31,7 +31,7 @@ public class Analyser extends Thread
         }
         catch(InterruptedException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 

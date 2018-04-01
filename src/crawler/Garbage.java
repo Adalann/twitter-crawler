@@ -148,7 +148,7 @@ class Garbage
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 }

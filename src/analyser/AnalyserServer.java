@@ -32,7 +32,7 @@ class AnalyserServer extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 
@@ -51,7 +51,7 @@ class AnalyserServer extends Thread
             catch(IOException e)
             {
                 if(state)
-                    e.printStackTrace(System.err);
+                    e.printStackTrace(conf.ERROR_STREAM());
             }
         }
     }
@@ -67,7 +67,7 @@ class AnalyserServer extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {

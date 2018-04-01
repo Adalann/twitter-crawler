@@ -41,7 +41,7 @@ class IndexorThread extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         this.socketAnalyser = sA;
         try
@@ -50,7 +50,7 @@ class IndexorThread extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         this.state = false;
         this.index = 0;
@@ -68,7 +68,7 @@ class IndexorThread extends Thread
         }
         catch(InterruptedException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         state = true;
         while(state)
@@ -83,7 +83,7 @@ class IndexorThread extends Thread
             }
             catch(IOException e)
             {
-                e.printStackTrace();
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             System.out.println("JOSN : " + tweetString + "\n");
             try
@@ -92,7 +92,7 @@ class IndexorThread extends Thread
             }
             catch(InterruptedException e)
             {
-                e.printStackTrace();
+                e.printStackTrace(conf.ERROR_STREAM());
             }
         }
     }
@@ -113,7 +113,7 @@ class IndexorThread extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         return s;
     }
@@ -132,7 +132,7 @@ class IndexorThread extends Thread
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {

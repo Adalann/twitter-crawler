@@ -37,7 +37,7 @@ class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         this.state = false;
     }
@@ -79,7 +79,7 @@ class ConnectionCrawler extends Connection
         catch(IOException e)
         {
             if(state)
-                e.printStackTrace(System.err);
+                e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {
@@ -102,7 +102,7 @@ class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {

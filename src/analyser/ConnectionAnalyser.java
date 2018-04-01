@@ -26,7 +26,7 @@ class ConnectionAnalyser extends Connection
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         this.state = false;
     }
@@ -44,11 +44,11 @@ class ConnectionAnalyser extends Connection
             }
             catch(ClassNotFoundException e)
             {
-                e.printStackTrace();
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(IOException e)
             {
-                e.printStackTrace();
+                e.printStackTrace(conf.ERROR_STREAM());
             }
         }
     }
@@ -63,7 +63,7 @@ class ConnectionAnalyser extends Connection
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {

@@ -114,6 +114,6 @@ class TweetListener implements StatusListener
     @Override
     public void onException(Exception ex)
     {
-        ex.printStackTrace();
+        ex.printStackTrace(conf.ERROR_STREAM());
     }
 }

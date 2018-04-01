@@ -20,6 +20,31 @@ public class ConfigurationIndexor extends Configuration
         this.PORT_CRAWLER = -1;
         this.HOSTNAME_ANALYSER = "";
         this.PORT_ANALYSER = -1;
+        if(ERROR_STREAM == null)
+        {
+            try
+            {
+                File f = new File("../error_log_indexor.txt");
+                int i = 1;
+                while(f.exists())
+                {
+                    f = new File("error_log_indexor_" + i++ + ".txt");
+                }
+                System.out.println("Error filename : " + f.getName());
+                ERROR_STREAM = new PrintStream(f);
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+                System.out.println(ANSI_RED + "Error, error_stream redirected to console." + ANSI_RESET);
+                ERROR_STREAM = System.err;
+            }
+        }
+    }
+
+    public PrintStream ERROR_STREAM()
+    {
+        return ERROR_STREAM;
     }
 
     @Override
