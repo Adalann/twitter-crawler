@@ -58,20 +58,23 @@ class AnalyserServer extends Thread
 
     public void close()
     {
-        try
+        if(state)
         {
-            for(ConnectionAnalyser c : clients)
+            try
+            {
+                for(ConnectionAnalyser c : clients)
                 c.close();
-            if(!server.isClosed())
-                server.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            state = false;
+                if(!server.isClosed())
+                    server.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                state = false;
+            }
         }
     }
 

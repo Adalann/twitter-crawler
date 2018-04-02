@@ -58,8 +58,8 @@ class ConnectionCrawler extends Connection
                 query = in.readLine();
                 if (query == null)
                 {
-                    System.out.println("Connection close by " + this.getName());
-                    break;
+                    System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                    close();
                 }
                 switch(query)
                 {
@@ -93,20 +93,23 @@ class ConnectionCrawler extends Connection
     @Override
     public void close()
     {
-        try
+        if(state)
         {
-            in.close();
-            out.close();
-            if(!connection.isClosed())
-                connection.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            state = false;
+            try
+            {
+                in.close();
+                out.close();
+                if(!connection.isClosed())
+                    connection.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                state = false;
+            }
         }
     }
 

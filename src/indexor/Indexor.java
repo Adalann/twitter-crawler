@@ -107,21 +107,24 @@ public class Indexor extends Thread
 
     public void stopIndexor()
     {
-        try
+        if(state)
         {
-            if(!connectionCrawler.isClosed())
+            try
+            {
+                if(!connectionCrawler.isClosed())
                 connectionCrawler.close();
-            if(!connectionAnalyser.isClosed())
+                if(!connectionAnalyser.isClosed())
                 connectionAnalyser.close();
-        }
-        catch(IOException e)
-        {
-            System.out.println("Error trying to close the sockets.");
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            state = false;
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error trying to close the sockets.");
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                state = false;
+            }
         }
     }
 }

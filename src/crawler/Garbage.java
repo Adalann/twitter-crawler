@@ -69,7 +69,7 @@ class Garbage
     *   @param i    L'indice de l'élément à récupérer.
     *   @return     Le JSON à la position i dans la liste de tweets.
     */
-    public String getElementAt(int i)
+    public synchronized String getElementAt(int i)
     {
         if(i < tweets.size())
             return tweets.get(i);
@@ -81,7 +81,7 @@ class Garbage
     *   Méthode pour récupérer le dernier élément de la liste.
     *   @return     Le dernier élément de la liste de tweets.
     */
-    public String getLastElement()
+    public synchronized String getLastElement()
     {
         return getElementAt(tweets.size() - 1);
     }
@@ -124,7 +124,7 @@ class Garbage
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 
@@ -145,6 +145,7 @@ class Garbage
         catch(FileNotFoundException e)
         {
             System.out.println(conf.ANSI_RED + "\nThe restore file " + conf.RESTOREFILE_NAME + " was not found.\nRestoration failed !\n" + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         catch(IOException e)
         {

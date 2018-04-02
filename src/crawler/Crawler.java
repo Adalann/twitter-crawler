@@ -125,9 +125,12 @@ public class Crawler extends Thread
 
     public void shutdown()
     {
-        crawler.stop();
-        sc.close();
-        server.close();
-        state = false;
+        if(state)
+        {
+            crawler.stop();
+            sc.close();
+            server.close();
+            state = false;
+        }
     }
 }

@@ -55,19 +55,22 @@ class ConnectionAnalyser extends Connection
 
     public void close()
     {
-        try
+        if(state)
         {
-            in.close();
-            if(!connection.isClosed())
-                connection.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            state = false;
+            try
+            {
+                in.close();
+                if(!connection.isClosed())
+                    connection.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                state = false;
+            }
         }
     }
 

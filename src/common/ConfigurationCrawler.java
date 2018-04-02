@@ -44,7 +44,7 @@ public class ConfigurationCrawler extends Configuration
             catch(IOException e)
             {
                 e.printStackTrace();
-                System.out.println(ANSI_RED + "Error, error_stream redirected to console." + ANSI_RESET);
+                System.out.println(ANSI_RED + "Error, error_stream redirected to the console." + ANSI_RESET);
                 ERROR_STREAM = System.err;
             }
         }

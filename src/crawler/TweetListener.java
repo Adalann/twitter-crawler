@@ -3,7 +3,7 @@
 *   @author Jules Perret
 *
 *   Classe qui implémente le crawler en lui même
-*   Utilise l'API twitter4j en mode stream, hérite donc de la class StatusListener de l'API
+*   Utilise l'API twitter4j en mode stream, implémente donc la classe StatusListener de l'API
 **/
 
 package crawler;
@@ -51,7 +51,7 @@ class TweetListener implements StatusListener
         this.twitter.shutdown();
         this.twitter.removeListener(this);
         state = false;
-        System.out.println(conf.ANSI_GREEN + "Done, writing data (" + tweets.size() + " tweets)" + conf.ANSI_RESET);
+        System.out.println(conf.ANSI_GREEN + "Done, wrote data (" + tweets.size() + " tweets)" + conf.ANSI_RESET);
         tweets.save();
     }
 
@@ -89,11 +89,11 @@ class TweetListener implements StatusListener
     @Override
     public void onStatus(Status status)
     {
-        synchronized(tweets)
-        {
-            if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
+        // synchronized(tweets)
+        // {
+        if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
             this.tweets.addStatusElement(status);
-        }
+        // }
     }
 
     /**

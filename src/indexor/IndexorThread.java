@@ -123,20 +123,23 @@ class IndexorThread extends Thread
     */
     public synchronized void close()
     {
-        try
+        if(state)
         {
-            outCrawler.println("STOP");
-            inCrawler.close();
-            outCrawler.close();
-            socketCrawler.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            this.state = false;
+            try
+            {
+                outCrawler.println("STOP");
+                inCrawler.close();
+                outCrawler.close();
+                socketCrawler.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                this.state = false;
+            }
         }
     }
 

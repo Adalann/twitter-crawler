@@ -65,7 +65,7 @@ class CrawlerServer extends Thread
                     e.printStackTrace(conf.ERROR_STREAM());
             }
         }
-        // close();
+        close();
     }
 
     /**
@@ -73,22 +73,25 @@ class CrawlerServer extends Thread
     */
     public void close()
     {
-        try
+        if(state)
         {
-            for(ConnectionCrawler c : clients)
+            try
             {
-                c.close();
-            }
-            if(!this.server.isClosed())
+                for(ConnectionCrawler c : clients)
+                {
+                    c.close();
+                }
+                if(!this.server.isClosed())
                 this.server.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
-        finally
-        {
-            this.state = false;
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            finally
+            {
+                this.state = false;
+            }
         }
     }
 
