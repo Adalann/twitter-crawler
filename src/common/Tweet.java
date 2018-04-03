@@ -15,6 +15,7 @@ public class Tweet implements Serializable
     public final String id_str;
     public final User user;
     public final String text;
+    public final Entities entities;
     public final String created_at;
     public final Retweet retweeted_status;
     public final int retweet_count;
@@ -26,6 +27,7 @@ public class Tweet implements Serializable
         this.id_str = "";
         this.user = null;
         this.text = "";
+        this.entities = null;
         this.created_at = "";
         this.retweeted_status = null;
         this.retweet_count = 0;
@@ -36,6 +38,6 @@ public class Tweet implements Serializable
     @Override
     public String toString()
     {
-        return "{id=" + id_str + ", user=" + user + ", text=" + text + ", created_at=" + created_at + ", retweeted_status=" + retweeted_status + ", rt=" + retweet_count + ", quoted_status=" + quoted_status + ", quoted_count=" + quote_count + "}";
+        return "{id=" + id_str + ", user=" + user + ", text=\"" + text + "\", entities=" + entities + ", created_at=" + created_at + ", retweeted_status=" + retweeted_status + ", rt=" + retweet_count + ", quoted_status=" + quoted_status + ", quoted_count=" + quote_count + "}";
     }
 }

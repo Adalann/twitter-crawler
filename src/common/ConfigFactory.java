@@ -1,4 +1,4 @@
-/**String
+/**
 *   @author Theo Martos
 *   @author Jules Perret
 *
