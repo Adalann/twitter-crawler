@@ -14,11 +14,13 @@ public class Analyser extends Thread
     private static final int CONF_CODE = 2;
     private ConfigurationAnalyser conf;
     private AnalyserServer server;
+    private DataContainer dataContainer;
 
     public Analyser()
     {
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
-        this.server = new AnalyserServer();
+        this.dataContainer = new DataContainer();
+        this.server = new AnalyserServer(dataContainer);
     }
 
     public void run()

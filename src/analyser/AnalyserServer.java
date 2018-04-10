@@ -17,14 +17,15 @@ class AnalyserServer extends Thread
     private static final int CONF_CODE = 2;
     private ServerSocket server;
     private List<ConnectionAnalyser> clients;
-    //private "classe qui encapsule les hashtables"
+    private DataContainer dataContainer;
     private ConfigurationAnalyser conf;
     private boolean state;
 
-    public AnalyserServer()
+    public AnalyserServer(DataContainer d)
     {
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<ConnectionAnalyser>();
+        this.dataContainer = d;
         try
         {
             this.server = new ServerSocket(conf.PORT);
@@ -44,7 +45,7 @@ class AnalyserServer extends Thread
         {
             try
             {
-                ConnectionAnalyser client = new ConnectionAnalyser(server.accept());
+                ConnectionAnalyser client = new ConnectionAnalyser(server.accept(), dataContainer);
                 clients.add(client);
                 client.start();
             }

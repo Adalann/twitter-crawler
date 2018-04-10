@@ -112,9 +112,9 @@ public class Indexor extends Thread
             try
             {
                 if(!connectionCrawler.isClosed())
-                connectionCrawler.close();
+                    connectionCrawler.close();
                 if(!connectionAnalyser.isClosed())
-                connectionAnalyser.close();
+                    connectionAnalyser.close();
             }
             catch(IOException e)
             {

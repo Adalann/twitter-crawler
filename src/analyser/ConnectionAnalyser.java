@@ -15,9 +15,9 @@ class ConnectionAnalyser extends Connection
 {
     private static final int CONF_CODE = 2;
     private ObjectInputStream in;
-    //private "objet qui encapsule les hashtables"
+    private DataContainer dataContainer;
 
-    public ConnectionAnalyser(Socket s)
+    public ConnectionAnalyser(Socket s, DataContainer d)
     {
         this.connection = s;
         try
@@ -28,6 +28,7 @@ class ConnectionAnalyser extends Connection
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
+        this.dataContainer = d;
         this.state = false;
     }
 
@@ -40,7 +41,7 @@ class ConnectionAnalyser extends Connection
             {
                 Tweet tweet = (Tweet)in.readObject();
                 if(tweet != null)
-                    System.out.println(tweet);
+                    dataContainer.add(tweet);
             }
             catch(ClassNotFoundException e)
             {
