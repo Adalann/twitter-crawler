@@ -38,12 +38,6 @@ public class Crawler extends Thread
     {
         state = true;
 
-        if(conf.RESTORE_ON_START)
-        {
-            System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
-            tweets.restore();
-        }
-
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");
         crawler.start(conf.FILTER);

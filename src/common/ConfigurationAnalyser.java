@@ -11,11 +11,17 @@ public class ConfigurationAnalyser extends Configuration
 {
     public final int PORT;
     public final int CLIENT_LIMIT;
+    public final String SAVEFILE_NAME;
+    public final String RESTOREFILE_NAME;
+    public final boolean RESTORE_ON_START;
 
     public ConfigurationAnalyser()
     {
         this.PORT = -1;
         this.CLIENT_LIMIT = -1;
+        this.SAVEFILE_NAME = "";
+        this.RESTOREFILE_NAME = "";
+        this.RESTORE_ON_START = false;
         if(ERROR_STREAM == null)
         {
             try
@@ -46,6 +52,6 @@ public class ConfigurationAnalyser extends Configuration
     @Override
     public String toString()
     {
-        return "Port : " + PORT + "\n\tClient limit : " + CLIENT_LIMIT;
+        return "Port : " + PORT + "\n\tClient limit : " + CLIENT_LIMIT+ "\n\tSaveFile Name : " + SAVEFILE_NAME + "\n\tRestoreFile Name : " + RESTOREFILE_NAME + "\n\tRestore on start : " + RESTORE_ON_START;
     }
 }

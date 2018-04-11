@@ -27,6 +27,10 @@ class Garbage
     public Garbage()
     {
         this.tweets = new ArrayList<String>();
+        if(conf.RESTORE_ON_START)
+        {
+            restore();
+        }
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.index = 0;
     }
@@ -130,6 +134,7 @@ class Garbage
 
     public synchronized void restore()
     {
+        System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("../" + conf.RESTOREFILE_NAME));
@@ -139,7 +144,7 @@ class Garbage
                 if(line.startsWith("{"))
                     this.addStringElement(line);
             }
-            System.out.println(conf.ANSI_GREEN + "Restored " + tweets.size() + " element(s)" + conf.ANSI_RESET);
+            System.out.println(conf.ANSI_GREEN + "Restored " + tweets.size() + " element(s) whit success." + conf.ANSI_RESET);
             in.close();
         }
         catch(FileNotFoundException e)
@@ -149,6 +154,7 @@ class Garbage
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "\nAn error occured while restoration, please take a look at the logs.\nRestoration failed !\n" + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
     }

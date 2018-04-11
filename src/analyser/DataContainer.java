@@ -13,6 +13,7 @@ import java.io.*;
 
 class DataContainer implements Serializable
 {
+    private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
     private Map<String, String> retweets; // entrée ID tweet sortie String nombre de RT.
     private Map<String, List<Strings>> urls; // entrée ID tweet sortie String url.
@@ -98,6 +99,50 @@ class DataContainer implements Serializable
             {
                 listTweet.add(qt.id_str);
             }
+        }
+    }
+
+    public synchronized void save()
+    {
+        ConfigurationAnalyser conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
+        try
+        {
+            ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream(conf.SAVEFILE_NAME));
+            saveStream.writeObject(this);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
+    }
+
+    public synchronized void restore()
+    {
+        ConfigurationAnalyser conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
+        System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
+        try
+        {
+            ObjectInputStream restoreStream = new ObjectInputStream(new FileInputStream(conf.RESTOREFILE_NAME));
+            DataContainer restoredObject = (DataContainer)restoreStream.readObject();
+            if(restoredObject != null)
+            {
+                this.retweets = new HashMap(restoredObject.retweets);
+                this.urls = new HashMap(restoredObject.urls);
+                this.hashtags = new HashMap(restoredObject.hashtags);
+                this.idToNames = new HashMap(restoredObject.idToNames);
+                this.idToTweets = new HashMap(restoredObject.idToTweets);
+            }
+            System.out.println(conf.ANSI_GREEN + "Restored  whit success." + conf.ANSI_RESET);
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println(conf.ANSI_RED + "\nThe restore file " + conf.RESTOREFILE_NAME + " was not found.\nRestoration failed !\n" + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
+        catch(IOException e)
+        {
+            System.out.println(conf.ANSI_RED + "\nAn error occured while restoration, please take a look at the logs.\nRestoration failed !\n" + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 

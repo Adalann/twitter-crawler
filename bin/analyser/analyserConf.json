@@ -1,4 +1,7 @@
 {
     "PORT" : 2201,
-    "CLIENT_LIMIT" : -1
+    "CLIENT_LIMIT" : -1,
+    "SAVEFILE_NAME" : "save.data",
+    "RESTOREFILE_NAME" : "test.data",
+    "RESTORE_ON_START" : false
 }
