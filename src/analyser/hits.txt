@@ -12,28 +12,28 @@ function HITS(G)
         norm = 0
         for each utilisateur p in G do
             p.auth = 0
-            for each tweet q in p.incomingNeighbors do // p.incomingNeighbors est la liste des RTs des tweets de p
+            for each utilisateur q in p.incomingNeighbors do // p.incomingNeighbors est la liste des RTs des tweets de p
                 p.auth += q.hub
             od
         norm += square(p.auth)
         od
-    od
-    norm = sqrt(norm)
-    for each tweet p in G do
-        p.auth = p.auth / norm
-    od
-    norm = 0
-
-    for each tweet page p in G do
-        p.hub = 0
-        for each tweet r in p.outgoingNeighbors do //p.outgoingNeighbors est la liste de RTs de p
-            p.hub += r.auth
+        norm = sqrt(norm)
+        for each tweet p in G do
+            p.auth = p.auth / norm
         od
-        norm += square(p.hub)
-    od
-    norm = sqrt(norm)
-    for each tweet p in G do
-        p.hub = p.hub / norm
+        norm = 0
+
+        for each tweet page p in G do
+            p.hub = 0
+            for each tweet r in p.outgoingNeighbors do //p.outgoingNeighbors est la liste de RTs de p
+                p.hub += r.auth
+            od
+            norm += square(p.hub)
+        od
+        norm = sqrt(norm)
+        for each tweet p in G do
+            p.hub = p.hub / norm
+        od
     od
 
 ===================== Non-converging pseudocode

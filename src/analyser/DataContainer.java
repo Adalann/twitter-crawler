@@ -15,15 +15,17 @@ class DataContainer implements Serializable
 {
     private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
-    private Map<String, String> retweets; // entrée ID tweet sortie String nombre de RT.
-    private Map<String, List<Strings>> urls; // entrée ID tweet sortie String url.
+    private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
+    private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
+    private Map<String, List<String>> urls; // entrée ID tweet sortie String url.
     private Map<String, List<String>> hashtags; // entré hastag sortie arraylist des tweets.
     private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
     private Map<String, List<String>> idToTweets; // entrée ID user en sortie arraylist de ses tweets.
 
     public DataContainer()
     {
-        this.retweets = new HashMap<String, String>();
+        this.retweetCounts = new HashMap<String, String>();
+        this.retweets = new HashMap<String, List<String>>();
         this.urls = new HashMap<String, List<String>>();
         this.hashtags = new HashMap<String, List<String>>();
         this.idToName = new HashMap<String, String>();
@@ -33,7 +35,19 @@ class DataContainer implements Serializable
     public synchronized void add(Tweet t)
     {
         // Ajout Retweet
-        retweets.put(t.id_str, "" + t.retweet_count);
+        retweetCounts.put(t.id_str, "" + t.retweet_count);
+
+        if(t.retweeted_status != null)
+        {
+            if(retweets.containsKey(t.user.id_str))
+                retweets.get(t.user.id_str).add(t.retweeted_status.id_str);
+            else
+            {
+                List<String> l = new ArrayList<>();
+                l.add(t.retweeted_status.id_str);
+                retweets.put(t.user.id_str, l);
+            }
+        }
 
         // urlExt
         urls.put(t.id_str, new ArrayList<Url>(Array.asList(t.entities.urls)));
@@ -60,12 +74,12 @@ class DataContainer implements Serializable
         if(t.retweeted_status != null)
         {
             Retweet rt = t.retweeted_status;
-            retweets.put(rt.id_str, "" + rt.retweet_count);
+            retweetCounts.put(rt.id_str, "" + rt.retweet_count);
 
-            // String rtCountString = retweets.get(rt.id_str);
+            // String rtCountString = retweetCounts.get(rt.id_str);
             // if(rtCountString != null && (Intger.parseInt(rtCountString) < Intger.parseInt(rt.retweet_count)))
             // {
-            //     retweets.put(rt.id_str, "" + rt.retweet_count);
+            //     retweetCounts.put(rt.id_str, "" + rt.retweet_count);
             // }
 
             urls.put(rt.id_str, new ArrayList<Url>(Array.asList(rt.entities.urls)));
@@ -85,7 +99,7 @@ class DataContainer implements Serializable
         if(t.quoted_status != null)
         {
             QuotedTweet qt = t.quoted_status;
-            retweets.put(qt.id_str, "" + qt.retweet_count);
+            retweetCounts.put(qt.id_str, "" + qt.retweet_count);
 
             urls.put(qt.id_str, new ArrayList<Url>(Array.asList(qt.entities.urls)));
 
@@ -100,6 +114,41 @@ class DataContainer implements Serializable
                 listTweet.add(qt.id_str);
             }
         }
+    }
+
+    public int getRTCounts(String id)
+    {
+        return Integer.parseInt(retweetCounts.get(id));
+    }
+
+    public List<String> getRetweets(String id)
+    {
+        return retweets.get(id);
+    }
+
+    public List<String> getUrls(String id)
+    {
+        return urls.get(id);
+    }
+
+    public List<String> hashtags(String hashtag)
+    {
+        return hashtags.get(hashtag);
+    }
+
+    public String getName(String id)
+    {
+        return idToName.get(id);
+    }
+
+    public List<String> getTweets(String id)
+    {
+        return idToTweets.get(id);
+    }
+
+    public Set<String> getIDS()
+    {
+        return idToNames.keySet();
     }
 
     public synchronized void save()
@@ -126,7 +175,7 @@ class DataContainer implements Serializable
             DataContainer restoredObject = (DataContainer)restoreStream.readObject();
             if(restoredObject != null)
             {
-                this.retweets = new HashMap(restoredObject.retweets);
+                this.retweetCounts = new HashMap(restoredObject.retweetCounts);
                 this.urls = new HashMap(restoredObject.urls);
                 this.hashtags = new HashMap(restoredObject.hashtags);
                 this.idToNames = new HashMap(restoredObject.idToNames);
@@ -149,7 +198,9 @@ class DataContainer implements Serializable
     @Override
     public String toString()
     {
-        return retweets.toString() + "\n\n" + urls.toString() + "\n\n" + hashtags.toString() + "\n\n" + idToNames.toString() + "\n\n" + idToTweets.toString();
+        return retweetCounts.toString() + "\n\n" + urls.toString() + "\n\n" + hashtags.toString() + "\n\n" + idToNames.toString() + "\n\n" + idToTweets.toString();
     }
+
+
 
 }
