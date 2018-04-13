@@ -37,3 +37,4 @@ public class QuotedTweet implements Serializable
         return "{id=" + id_str + ", user=" + user + ", text=\"" + text + "\", entities=" + entities + ", created_at=" + created_at + ", rt=" + retweet_count + ", quoted_count=" + quote_count + "}";
     }
 }
+text=\"" + text + "\", entities=" + entities +
