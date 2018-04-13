@@ -50,7 +50,7 @@ class DataContainer implements Serializable
         }
 
         // urlExt
-        urls.put(t.id_str, new ArrayList<Url>(Array.asList(t.entities.urls)));
+        urls.put(t.id_str, new ArrayList<String>(Array.asList(t.entities.urls)));
 
         // hashtag
         hashtags.put(t.id_str, new ArrayList<String>(Array.asList(t.entities.hashtags)));
