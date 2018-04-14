@@ -1,9 +1,9 @@
 {
     "PORT" : 2200,
     "CLIENT_LIMIT" : -1,
-    "FILTER" : "#ThursdayThoughts",
-    "TWEET_LIMIT" : -1,
+    "FILTER" : "#DiaInternacionalDelBeso",
+    "TWEET_LIMIT" : 7000,
     "SAVEFILE_NAME" : "output.data",
     "RESTOREFILE_NAME" : "test.data",
-    "RESTORE_ON_START" : true
+    "RESTORE_ON_START" : false
 }

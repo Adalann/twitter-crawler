@@ -94,9 +94,9 @@ public class Crawler extends Thread
                     crawler.stop();
                     break;
                 }
-                case "stop": // Stop l'application'
+                case "stop": // Stop l'application
                 {
-                    state = false;
+                    shutdown();
                     break;
                 }
                 case "size": // Affiche le nombre de tweets capturés

@@ -27,11 +27,11 @@ class Garbage
     public Garbage()
     {
         this.tweets = new ArrayList<String>();
+        this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         if(conf.RESTORE_ON_START)
         {
             restore();
         }
-        this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.index = 0;
     }
 

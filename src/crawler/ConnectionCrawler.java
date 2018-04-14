@@ -9,7 +9,7 @@ package crawler;
 
 import java.io.*;
 import java.net.*;
-import common.Connection;
+import common.*;
 
 class ConnectionCrawler extends Connection
 {
@@ -17,6 +17,7 @@ class ConnectionCrawler extends Connection
     private BufferedReader in;
     private PrintWriter out;
     private Garbage tweets;
+    private ConfigurationCrawler conf;
 
     private static int id = 0;
 
@@ -29,6 +30,7 @@ class ConnectionCrawler extends Connection
     {
         this.connection = s;
         this.tweets = g;
+        this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.setName("Client-" + id++);
         try
         {

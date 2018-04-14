@@ -7,6 +7,8 @@
 
 package common;
 
+import java.io.*;
+
 public class ConfigurationIndexor extends Configuration
 {
     public final String HOSTNAME_CRAWLER;

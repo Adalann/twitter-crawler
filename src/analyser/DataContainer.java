@@ -17,8 +17,8 @@ class DataContainer implements Serializable
     private static final long serialVersionUID = 50000l;
     private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
     private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
-    private Map<String, List<String>> urls; // entrée ID tweet sortie String url.
-    private Map<String, List<String>> hashtags; // entré hastag sortie arraylist des tweets.
+    private Map<String, List<Url>> urls; // entrée ID tweet sortie String url.
+    private Map<String, List<Hashtag>> hashtags; // entré hastag sortie arraylist des tweets.
     private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
     private Map<String, List<String>> idToTweets; // entrée ID user en sortie arraylist de ses tweets.
 
@@ -26,9 +26,9 @@ class DataContainer implements Serializable
     {
         this.retweetCounts = new HashMap<String, String>();
         this.retweets = new HashMap<String, List<String>>();
-        this.urls = new HashMap<String, List<String>>();
-        this.hashtags = new HashMap<String, List<String>>();
-        this.idToName = new HashMap<String, String>();
+        this.urls = new HashMap<String, List<Url>>();
+        this.hashtags = new HashMap<String, List<Hashtag>>();
+        this.idToNames = new HashMap<String, String>();
         this.idToTweets = new HashMap<String, List<String>>();
     }
 
@@ -50,10 +50,10 @@ class DataContainer implements Serializable
         }
 
         // urlExt
-        urls.put(t.id_str, new ArrayList<String>(Array.asList(t.entities.urls)));
+        urls.put(t.id_str, new ArrayList<Url>(Arrays.asList(t.entities.urls)));
 
         // hashtag
-        hashtags.put(t.id_str, new ArrayList<String>(Array.asList(t.entities.hashtags)));
+        hashtags.put(t.id_str, new ArrayList<Hashtag>(Arrays.asList(t.entities.hashtags)));
 
         // idToName
         if(!idToNames.containsKey(t.user.id_str))
@@ -62,7 +62,7 @@ class DataContainer implements Serializable
         // idToTweets
         if(idToTweets.containsKey(t.user.id_str))
         {
-            idToTweets.get(t.user.id_str).add(id_str);
+            idToTweets.get(t.user.id_str).add(t.id_str);
         }
         else
         {
@@ -82,9 +82,9 @@ class DataContainer implements Serializable
             //     retweetCounts.put(rt.id_str, "" + rt.retweet_count);
             // }
 
-            urls.put(rt.id_str, new ArrayList<Url>(Array.asList(rt.entities.urls)));
+            urls.put(rt.id_str, new ArrayList<Url>(Arrays.asList(rt.entities.urls)));
 
-            hashtags.put(rt.id_str, new ArrayList<String>(Array.asList(rt.entities.hashtags)));
+            hashtags.put(rt.id_str, new ArrayList<Hashtag>(Arrays.asList(rt.entities.hashtags)));
 
             if(!idToNames.containsKey(rt.user.id_str))
                 idToNames.put(rt.user.id_str, rt.user.screen_name);
@@ -101,9 +101,9 @@ class DataContainer implements Serializable
             QuotedTweet qt = t.quoted_status;
             retweetCounts.put(qt.id_str, "" + qt.retweet_count);
 
-            urls.put(qt.id_str, new ArrayList<Url>(Array.asList(qt.entities.urls)));
+            urls.put(qt.id_str, new ArrayList<Url>(Arrays.asList(qt.entities.urls)));
 
-            hashtags.put(qt.id_str, new ArrayList<String>(Array.asList(qt.entities.hashtags)));
+            hashtags.put(qt.id_str, new ArrayList<Hashtag>(Arrays.asList(qt.entities.hashtags)));
 
             if(!idToNames.containsKey(qt.user.id_str))
                 idToNames.put(qt.user.id_str, qt.user.screen_name);
@@ -126,19 +126,19 @@ class DataContainer implements Serializable
         return retweets.get(id);
     }
 
-    public List<String> getUrls(String id)
+    public List<Url> getUrls(String id)
     {
         return urls.get(id);
     }
 
-    public List<String> hashtags(String hashtag)
+    public List<Hashtag> hashtags(String hashtag)
     {
         return hashtags.get(hashtag);
     }
 
     public String getName(String id)
     {
-        return idToName.get(id);
+        return idToNames.get(id);
     }
 
     public List<String> getTweets(String id)
@@ -186,6 +186,10 @@ class DataContainer implements Serializable
         catch(FileNotFoundException e)
         {
             System.out.println(conf.ANSI_RED + "\nThe restore file " + conf.RESTOREFILE_NAME + " was not found.\nRestoration failed !\n" + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
+        catch(ClassNotFoundException e)
+        {
             e.printStackTrace(conf.ERROR_STREAM());
         }
         catch(IOException e)

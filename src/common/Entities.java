@@ -17,7 +17,7 @@ public class Entities implements Serializable
 
     public Entities()
     {
-        this.urls = new Urls[0];
+        this.urls = new Url[0];
         this.hashtags = new Hashtag[0];
     }
 

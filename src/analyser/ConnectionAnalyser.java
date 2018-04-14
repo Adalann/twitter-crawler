@@ -16,9 +16,11 @@ class ConnectionAnalyser extends Connection
     private static final int CONF_CODE = 2;
     private ObjectInputStream in;
     private DataContainer dataContainer;
+    private ConfigurationAnalyser conf;
 
     public ConnectionAnalyser(Socket s, DataContainer d)
     {
+        this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         this.connection = s;
         try
         {
