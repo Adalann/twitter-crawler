@@ -15,10 +15,10 @@ import common.*;
 class IndexorThread extends Thread
 {
     private static final int CONF_CODE = 1;
-    private String tweetString;
     private Socket socketCrawler;
     private Socket socketAnalyser;
     private boolean state;
+    private ConfigurationIndexor conf;
     private int index;
 
     private BufferedReader inCrawler;
@@ -32,7 +32,7 @@ class IndexorThread extends Thread
     */
     public IndexorThread(Socket sC, Socket sA)
     {
-        this.tweetString = "";
+        this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
         this.socketCrawler = sC;
         try
         {
@@ -71,29 +71,38 @@ class IndexorThread extends Thread
             e.printStackTrace(conf.ERROR_STREAM());
         }
         state = true;
+        String tweetString = "";
         while(state)
         {
             tweetString = requestNextTweet();
+            if(tweetString == null)
+            {
+                System.out.println(conf.ANSI_RED + "Connection to the crawler server lost, closing the indexor" + conf.ANSI_RESET);
+                close();
+            }
+            else if(tweetString.equals("STOP"))
+            {
+                System.out.println(conf.ANSI_BLUE + "Tweet limit reached, closing the indexor" + conf.ANSI_RESET);
+                close();
+            }
+            else
+            {
+                Gson gson = new GsonBuilder().create();
+                Tweet tweet = gson.fromJson(tweetString, Tweet.class);
+                try
+                {
+                    if(tweet != null && !tweetString.equals(""))
+                    {
+                        outAnalyser.writeObject(tweet);
+                        System.out.println("JOSN : " + tweetString + "\n");
+                    }
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace(conf.ERROR_STREAM());
+                }
+            }
 
-            Gson gson = new GsonBuilder().create();
-            Tweet tweet = gson.fromJson(tweetString, Tweet.class);
-            try
-            {
-                outAnalyser.writeObject(tweet);
-            }
-            catch(IOException e)
-            {
-                e.printStackTrace(conf.ERROR_STREAM());
-            }
-            System.out.println("JOSN : " + tweetString + "\n");
-            try
-            {
-                Thread.sleep(1000);
-            }
-            catch(InterruptedException e)
-            {
-                e.printStackTrace(conf.ERROR_STREAM());
-            }
         }
     }
 
@@ -108,7 +117,11 @@ class IndexorThread extends Thread
         {
             outCrawler.println("NEXT");
             s = inCrawler.readLine();
-            if(!s.equals(""))
+            if(s == null)
+            {
+                return null;
+            }
+            else if(!s.equals(""))
                 index++;
         }
         catch(IOException e)

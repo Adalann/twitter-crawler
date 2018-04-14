@@ -62,6 +62,7 @@ class ConnectionCrawler extends Connection
                 {
                     System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
                     close();
+                    break;
                 }
                 switch(query)
                 {

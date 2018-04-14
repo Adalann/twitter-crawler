@@ -99,6 +99,8 @@ class Garbage
         String r = "";
         if(index < tweets.size())
             r = tweets.get(index++);
+        else if(index >= conf.TWEET_LIMIT)
+            r = "STOP";
         return r;
     }
 

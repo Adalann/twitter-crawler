@@ -16,36 +16,94 @@ class DataContainer implements Serializable
     private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
     private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
-    private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
+    // private Map<String, List<String>> retweetedTweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
+    // private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses retweets
     private Map<String, List<Url>> urls; // entrée ID tweet sortie String url.
     private Map<String, List<Hashtag>> hashtags; // entré hastag sortie arraylist des tweets.
     private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
     private Map<String, List<String>> idToTweets; // entrée ID user en sortie arraylist de ses tweets.
 
+    private Map<String, List<String>> incomingNeighbors;
+    private Map<String, List<String>> outcomingNeighbors;
+
     public DataContainer()
     {
         this.retweetCounts = new HashMap<String, String>();
-        this.retweets = new HashMap<String, List<String>>();
+        // this.retweetedTweets = new HashMap<String, List<String>>();
+        // this.retweets = new HashMap<String, List<String>>();
         this.urls = new HashMap<String, List<Url>>();
         this.hashtags = new HashMap<String, List<Hashtag>>();
         this.idToNames = new HashMap<String, String>();
         this.idToTweets = new HashMap<String, List<String>>();
+
+        this.incomingNeighbors = new HashMap<String, List<String>>();
+        this.outcomingNeighbors = new HashMap<String, List<String>>();
     }
 
     public synchronized void add(Tweet t)
     {
+
+        if(t.retweeted_status != null)
+        {
+            Retweet rt = t.retweeted_status;
+            retweetCounts.put(rt.id_str, "" + rt.retweet_count);
+
+            urls.put(rt.id_str, new ArrayList<Url>(Arrays.asList(rt.entities.urls)));
+
+            hashtags.put(rt.id_str, new ArrayList<Hashtag>(Arrays.asList(rt.entities.hashtags)));
+
+            if(!idToNames.containsKey(rt.user.id_str))
+            idToNames.put(rt.user.id_str, rt.user.screen_name);
+
+            List<String> listTweet = idToTweets.get(rt.user.id_str);
+            if(listTweet != null && listTweet.indexOf(rt.id_str) == -1)
+            {
+                listTweet.add(rt.id_str);
+            }
+        }
+
+        if(t.quoted_status != null)
+        {
+            QuotedTweet qt = t.quoted_status;
+            retweetCounts.put(qt.id_str, "" + qt.retweet_count);
+
+            urls.put(qt.id_str, new ArrayList<Url>(Arrays.asList(qt.entities.urls)));
+
+            hashtags.put(qt.id_str, new ArrayList<Hashtag>(Arrays.asList(qt.entities.hashtags)));
+
+            if(!idToNames.containsKey(qt.user.id_str))
+            idToNames.put(qt.user.id_str, qt.user.screen_name);
+
+            List<String> listTweet = idToTweets.get(qt.user.id_str);
+            if(listTweet != null && listTweet.indexOf(qt.id_str) == -1)
+            {
+                listTweet.add(qt.id_str);
+            }
+        }
+
         // Ajout Retweet
         retweetCounts.put(t.id_str, "" + t.retweet_count);
 
         if(t.retweeted_status != null)
         {
-            if(retweets.containsKey(t.user.id_str))
-                retweets.get(t.user.id_str).add(t.retweeted_status.id_str);
+            // incomingNeighbors
+            if(incomingNeighbors.containsKey(t.retweeted_status.user.id_str))
+                incomingNeighbors.get(t.retweeted_status.user.id_str).add(t.user.id_str);
             else
             {
-                List<String> l = new ArrayList<>();
-                l.add(t.retweeted_status.id_str);
-                retweets.put(t.user.id_str, l);
+                List<String> l = new ArrayList<String>();
+                l.add(t.user.id_str);
+                incomingNeighbors.put(t.retweeted_status.user.id_str, l);
+            }
+
+            // outcomingNeighbors
+            if(outcomingNeighbors.containsKey(t.user.id_str))
+                outcomingNeighbors.get(t.user.id_str).add(t.retweeted_status.user.id_str);
+            else
+            {
+                List<String> l = new ArrayList<String>();
+                l.add(t.retweeted_status.user.id_str);
+                outcomingNeighbors.put(t.user.id_str, l);
             }
         }
 
@@ -70,50 +128,6 @@ class DataContainer implements Serializable
             l.add(t.id_str);
             idToTweets.put(t.user.id_str, l);
         }
-
-        if(t.retweeted_status != null)
-        {
-            Retweet rt = t.retweeted_status;
-            retweetCounts.put(rt.id_str, "" + rt.retweet_count);
-
-            // String rtCountString = retweetCounts.get(rt.id_str);
-            // if(rtCountString != null && (Intger.parseInt(rtCountString) < Intger.parseInt(rt.retweet_count)))
-            // {
-            //     retweetCounts.put(rt.id_str, "" + rt.retweet_count);
-            // }
-
-            urls.put(rt.id_str, new ArrayList<Url>(Arrays.asList(rt.entities.urls)));
-
-            hashtags.put(rt.id_str, new ArrayList<Hashtag>(Arrays.asList(rt.entities.hashtags)));
-
-            if(!idToNames.containsKey(rt.user.id_str))
-                idToNames.put(rt.user.id_str, rt.user.screen_name);
-
-            List<String> listTweet = idToTweets.get(rt.user.id_str);
-            if(listTweet != null && listTweet.indexOf(rt.id_str) == -1)
-            {
-                listTweet.add(rt.id_str);
-            }
-        }
-
-        if(t.quoted_status != null)
-        {
-            QuotedTweet qt = t.quoted_status;
-            retweetCounts.put(qt.id_str, "" + qt.retweet_count);
-
-            urls.put(qt.id_str, new ArrayList<Url>(Arrays.asList(qt.entities.urls)));
-
-            hashtags.put(qt.id_str, new ArrayList<Hashtag>(Arrays.asList(qt.entities.hashtags)));
-
-            if(!idToNames.containsKey(qt.user.id_str))
-                idToNames.put(qt.user.id_str, qt.user.screen_name);
-
-            List<String> listTweet = idToTweets.get(qt.user.id_str);
-            if(listTweet != null && listTweet.indexOf(qt.id_str) == -1)
-            {
-                listTweet.add(qt.id_str);
-            }
-        }
     }
 
     public int getRTCounts(String id)
@@ -121,9 +135,14 @@ class DataContainer implements Serializable
         return Integer.parseInt(retweetCounts.get(id));
     }
 
-    public List<String> getRetweets(String id)
+    public List<String> getIncomingNeighbors(String id)
     {
-        return retweets.get(id);
+        return incomingNeighbors.get(id);
+    }
+
+    public List<String> getOutcomingNeighbors(String id)
+    {
+        return outcomingNeighbors.get(id);
     }
 
     public List<Url> getUrls(String id)
@@ -190,6 +209,7 @@ class DataContainer implements Serializable
         }
         catch(ClassNotFoundException e)
         {
+            System.out.println(conf.ANSI_RED + "\nAn error occured while restoration, please take a look at the logs.\nRestoration failed !\n" + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
         catch(IOException e)

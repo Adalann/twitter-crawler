@@ -8,6 +8,7 @@
 package analyser;
 
 import java.util.*;
+import java.io.*;
 
 class HITS extends Thread
 {
@@ -25,18 +26,20 @@ class HITS extends Thread
 
     public void run()
     {
-        initUserList();
+        for(String id : data.getIDS())
+            users.add(new UserHITS(id));
+
         double norm = 0;
         for(int i = 0; i < K; i++)
         {
             for(UserHITS user : users)
             {
                 user.auth = 0;
-                for(UserHITS neighbors : generateIncomingNeighbors(user.id))
-                    user.auth += neighbors.hub;
+                for(UserHITS neighbor : generateIncomingNeighbors(user.id))
+                    user.auth += neighbor.hub;
                 norm = user.auth * user.auth;
             }
-            norm = math.sqrt(norm);
+            norm = Math.sqrt(norm);
             for(UserHITS user : users)
                 user.auth = user.auth / norm;
             norm = 0;
@@ -44,42 +47,60 @@ class HITS extends Thread
             for(UserHITS user : users)
             {
                 user.hub = 0;
-                for(UserHITS neighbors : generateOutcomingNeighbors(idUser))
-                    user.hub += neighbors.auth;
+                for(UserHITS neighbor : generateOutcomingNeighbors(user.id))
+                    user.hub += neighbor.auth;
                 norm += user.hub * user.hub;
             }
-            norm += math.sqrt(norm);
+            norm += Math.sqrt(norm);
             for(UserHITS user : users)
                 user.hub = user.hub / norm;
-        }
-    }
 
-    public void initUserList()
-    {
-        for(String id : data.getIDS())
-            users.add(new UserHITS(id));
+            displayResults(i);
+        }
     }
 
     private List<UserHITS> generateIncomingNeighbors(String idUser)
     {
-        List<String> userTweets = data.getTweets(idUser);
         List<UserHITS> incomingNeighbors = new ArrayList<UserHITS>();
-
-        for(String tweetId : userTweets)
+        List<String> dataFromContainer = data.getIncomingNeighbors(idUser);
+        if(dataFromContainer != null)
         {
-            for(UserHITS user : users)
-            {
-                if(data.getRetweets(user.id).contains(tweetId) && !incomingNeighbors.contains(user)) // si user à retweeter un tweet  de l'utilisateur identifié par userId et que cet utilisater n'est pas dejà dans la liste
-                    incomingNeighbors.add(user);
-            }
+            for(String id : dataFromContainer)
+                incomingNeighbors.add(new UserHITS(id));
+
         }
 
         return incomingNeighbors;
     }
 
-    public List<String> generateOutcomingNeighbors(String idUser)
+    public List<UserHITS> generateOutcomingNeighbors(String idUser)
     {
-        return data.getRetweets(idUser);
+        List<UserHITS> outcomingNeighbors = new ArrayList<UserHITS>();
+        List<String> dataFromContainer = data.getOutcomingNeighbors(idUser);
+        if(dataFromContainer != null)
+        {
+            for(String id : data.getOutcomingNeighbors(idUser))
+            outcomingNeighbors.add(new UserHITS(id));
+        }
+
+        return outcomingNeighbors;
+    }
+
+    public void displayResults(int i)
+    {
+        System.out.println("STEP " + i);
+        for(UserHITS user : users)
+        {
+            System.out.println(user);
+            try
+            {
+                System.in.read();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     class UserHITS
@@ -93,14 +114,19 @@ class HITS extends Thread
         {
             this.id = id;
             this.name = data.getName(id);
-            this.auth = 1;
-            this.hub = 1;
+            this.auth = 1.;
+            this.hub = 1.;
         }
 
-        @Override
         public boolean equals(UserHITS u)
         {
             return this.id.equals(u.id);
+        }
+
+        @Override
+        public String toString()
+        {
+            return name + " :\n\tAuth score : " + auth + "\n\tHub score : " + hub + "\n\n";
         }
     }
 }

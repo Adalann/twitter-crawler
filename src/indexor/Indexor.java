@@ -73,7 +73,6 @@ public class Indexor extends Thread
         {
             if(connectionCrawler.isClosed())
             {
-                System.out.println("Connection close by the host");
                 state = false;
                 break;
             }
