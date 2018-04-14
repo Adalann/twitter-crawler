@@ -16,8 +16,6 @@ class DataContainer implements Serializable
     private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
     private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
-    // private Map<String, List<String>> retweetedTweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
-    // private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses retweets
     private Map<String, List<Url>> urls; // entrée ID tweet sortie String url.
     private Map<String, List<Hashtag>> hashtags; // entré hastag sortie arraylist des tweets.
     private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
