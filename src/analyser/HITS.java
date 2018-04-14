@@ -60,7 +60,7 @@ class HITS extends Thread
             users.add(new UserHITS(id));
     }
 
-    private List<String> generateIncomingNeighbors(String idUser)
+    private List<UserHITS> generateIncomingNeighbors(String idUser)
     {
         List<String> userTweets = data.getTweets(idUser);
         List<UserHITS> incomingNeighbors = new ArrayList<UserHITS>();
