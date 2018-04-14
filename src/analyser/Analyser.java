@@ -19,6 +19,7 @@ public class Analyser extends Thread
     private DataContainer dataContainer;
     private HITS hits;
     private Scanner sc;
+    private boolean state;
 
     public Analyser()
     {
@@ -27,28 +28,46 @@ public class Analyser extends Thread
         this.server = new AnalyserServer(dataContainer);
         this.hits = new HITS(dataContainer, 10);
         this.sc = new Scanner(System.in);
+        this.state = false;
     }
 
     public void run()
     {
+        state = true;
         server.start();
 
-        while(true)
+        while(state)
         {
             System.out.print("> ");
-            String q = sc.readLine();
-            if(q.equals("start"))
-                hits.start();
+            String q = sc.nextLine().toLowerCase();
+            switch(q)
+            {
+                case "start":
+                {
+                    hits.start();
+                    System.out.println("HITS started");
+                    break;
+                }
+                case "stop":
+                {
+                    state = false;
+                    break;
+                }
+                default:
+                {
+                    System.out.println("incorrect");
+                }
+            }
         }
-
-        try
-        {
-            server.join();
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
+        //
+        // try
+        // {
+        //     server.join();
+        // }
+        // catch(InterruptedException e)
+        // {
+        //     e.printStackTrace(conf.ERROR_STREAM());
+        // }
     }
 
 }

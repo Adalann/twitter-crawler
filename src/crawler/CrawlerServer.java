@@ -79,7 +79,8 @@ class CrawlerServer extends Thread
             {
                 for(ConnectionCrawler c : clients)
                 {
-                    c.close();
+                    if(c != null)
+                        c.close();
                 }
                 if(!this.server.isClosed())
                 this.server.close();
