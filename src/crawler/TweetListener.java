@@ -38,8 +38,8 @@ class TweetListener implements StatusListener
     */
     public void start(String f)
     {
-        this.twitter.addListener(this);
-        this.twitter.filter(f);
+        twitter.addListener(this);
+        twitter.filter(f);
         state = true;
     }
 
@@ -48,11 +48,9 @@ class TweetListener implements StatusListener
     */
     public void stop()
     {
-        this.twitter.shutdown();
-        this.twitter.removeListener(this);
+        twitter.shutdown();
+        twitter.removeListener(this);
         state = false;
-        System.out.println(conf.ANSI_GREEN + "Done, wrote data (" + tweets.size() + " tweets)" + conf.ANSI_RESET);
-        tweets.save();
     }
 
     /**
@@ -61,7 +59,7 @@ class TweetListener implements StatusListener
     */
     public int getGarbageSize()
     {
-        return this.tweets.size();
+        return tweets.size();
     }
 
     /**
@@ -70,7 +68,7 @@ class TweetListener implements StatusListener
     */
     public Garbage getGarbage()
     {
-        return this.tweets;
+        return tweets;
     }
 
     /**
@@ -89,11 +87,8 @@ class TweetListener implements StatusListener
     @Override
     public void onStatus(Status status)
     {
-        // synchronized(tweets)
-        // {
         if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
-            this.tweets.addStatusElement(status);
-        // }
+            tweets.addStatusElement(status);
     }
 
     /**
@@ -114,6 +109,7 @@ class TweetListener implements StatusListener
     @Override
     public void onException(Exception ex)
     {
+        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
         ex.printStackTrace(conf.ERROR_STREAM());
     }
 }

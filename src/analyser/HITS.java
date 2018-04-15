@@ -66,7 +66,6 @@ class HITS extends Thread
         {
             for(String id : dataFromContainer)
                 incomingNeighbors.add(new UserHITS(id));
-
         }
 
         return incomingNeighbors;

@@ -47,10 +47,12 @@ class ConnectionAnalyser extends Connection
             }
             catch(ClassNotFoundException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
         }
@@ -68,6 +70,7 @@ class ConnectionAnalyser extends Connection
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally

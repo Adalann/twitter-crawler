@@ -73,7 +73,7 @@ class Garbage
     *   @param i    L'indice de l'élément à récupérer.
     *   @return     Le JSON à la position i dans la liste de tweets.
     */
-    public synchronized String getElementAt(int i)
+    public String getElementAt(int i)
     {
         if(i < tweets.size())
             return tweets.get(i);
@@ -92,7 +92,7 @@ class Garbage
 
     /**
     *   Méthode utilisée par les indexeurs pour récupérer le prochain élément de la liste à traiter, indiqué par l'attribut index.
-    *   @return     Le prochain élément à traiter
+    *   @return     Le prochain élément à traiter ou un sigbal d'arrêt pour les indexeurs
     */
     public synchronized String getNextElement()
     {
@@ -130,6 +130,7 @@ class Garbage
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
     }

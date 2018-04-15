@@ -27,8 +27,6 @@ class DataContainer implements Serializable
     public DataContainer()
     {
         this.retweetCounts = new HashMap<String, String>();
-        // this.retweetedTweets = new HashMap<String, List<String>>();
-        // this.retweets = new HashMap<String, List<String>>();
         this.urls = new HashMap<String, List<Url>>();
         this.hashtags = new HashMap<String, List<Hashtag>>();
         this.idToNames = new HashMap<String, String>();
@@ -178,6 +176,7 @@ class DataContainer implements Serializable
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
     }

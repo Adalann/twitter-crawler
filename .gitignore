@@ -17,10 +17,9 @@ Thumbs.db
 ###################################
 twitter4j.properties
 
-# Atom files #
+# Project files #
 ##############
 .ropeproject
 src.old
-.ftpconfig
-.ftpconfig-vps
-.ftpconfig-pi
+.ftpconfig*
+error*

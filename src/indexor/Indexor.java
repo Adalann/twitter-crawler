@@ -18,17 +18,17 @@ public class Indexor extends Thread
 {
     private static final int CONF_CODE = 1;
     private static int nbInstance = 0;
-    private ConfigurationIndexor conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
+    private ConfigurationIndexor conf;
     private IndexorThread indexorThread;
     private Socket connectionCrawler;
     private Socket connectionAnalyser;
-    //private "object qui gère le buffer"
     private boolean state;
     private boolean quiet;
     private Scanner sc;
 
     public Indexor(boolean quiet)
     {
+        this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
         try
         {
             this.connectionCrawler = new Socket(conf.HOSTNAME_CRAWLER, conf.PORT_CRAWLER);
@@ -117,7 +117,7 @@ public class Indexor extends Thread
             }
             catch(IOException e)
             {
-                System.out.println("Error trying to close the sockets.");
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally

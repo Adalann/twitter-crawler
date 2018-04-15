@@ -62,14 +62,6 @@ class IndexorThread extends Thread
     @Override
     public void run()
     {
-        try
-        {
-            Thread.sleep(1000);
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-        }
         state = true;
         String tweetString = "";
         while(state)
@@ -77,12 +69,12 @@ class IndexorThread extends Thread
             tweetString = requestNextTweet();
             if(tweetString == null)
             {
-                System.out.println(conf.ANSI_RED + "Connection to the crawler server lost, closing the indexor" + conf.ANSI_RESET);
+                System.out.println(conf.ANSI_RED + "Connection to the crawler server lost, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
                 close();
             }
             else if(tweetString.equals("STOP"))
             {
-                System.out.println(conf.ANSI_BLUE + "Tweet limit reached, closing the indexor" + conf.ANSI_RESET);
+                System.out.println(conf.ANSI_BLUE + "Tweet limit reached, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
                 close();
             }
             else
@@ -99,6 +91,7 @@ class IndexorThread extends Thread
                 }
                 catch(IOException e)
                 {
+                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                     e.printStackTrace(conf.ERROR_STREAM());
                 }
             }
@@ -126,6 +119,7 @@ class IndexorThread extends Thread
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
         return s;
@@ -147,6 +141,7 @@ class IndexorThread extends Thread
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally

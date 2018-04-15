@@ -22,7 +22,7 @@ class ConnectionCrawler extends Connection
     private static int id = 0;
 
     /**
-    *   Constructeur de la classe qui initialise le sockect, les flux réseaux et le garbage.
+    *   Constructeur de la classe qui initialise le socket, les flux réseaux et le garbage.
     *   @param s    Le socket issu de la connexion avec le sokect serveur.
     *   @param g    Le gargabe qui stocke les tweets
     */
@@ -39,6 +39,7 @@ class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
         this.state = false;
@@ -51,7 +52,7 @@ class ConnectionCrawler extends Connection
     @Override
     public void run()
     {
-        this.state = true;
+        tate = true;
         try
         {
             String query = "";
@@ -82,7 +83,10 @@ class ConnectionCrawler extends Connection
         catch(IOException e)
         {
             if(state)
+            {
+                System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
+            }
         }
         finally
         {
@@ -107,6 +111,7 @@ class ConnectionCrawler extends Connection
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally
@@ -122,7 +127,7 @@ class ConnectionCrawler extends Connection
     @Override
     public String toString()
     {
-        return this.getName() + " " + connection.toString();
+        return this.getName() + " => " + connection.toString();
     }
 
 }

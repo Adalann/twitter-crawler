@@ -9,9 +9,6 @@
 package crawler;
 
 import java.util.*;
-import java.io.*;
-import java.net.*;
-import twitter4j.*;
 import common.*;
 
 public class Crawler extends Thread
@@ -41,7 +38,7 @@ public class Crawler extends Thread
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");
         crawler.start(conf.FILTER);
-        System.out.println("Crawler started !");
+        System.out.println(conf.ANSI_GREEN + "Crawler started !" + conf.ANSI_RESET);
 
         // Temporisation pour une raison d'interface
         try
@@ -50,13 +47,14 @@ public class Crawler extends Thread
         }
         catch(InterruptedException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
 
         // Démarrage du serveur qui gère les connexions des modules indexeurs
         System.out.println("Starting the server...");
         server.start();
-        System.out.println("Server started !");
+        System.out.println(conf.ANSI_GREEN + "Server started !" + conf.ANSI_RESET);
 
         // Boucle pour l'interface console
         while(state)
@@ -76,7 +74,7 @@ public class Crawler extends Thread
                     tweets.save();
                     break;
                 }
-                case "startc": // Démarre le crawler avec le filtre définit plus haut
+                case "startc": // Démarre le crawler avec le filtre définit dans le fichier de configuration
                 {
                     crawler.start(conf.FILTER);
                     try
@@ -85,6 +83,7 @@ public class Crawler extends Thread
                     }
                     catch(InterruptedException e)
                     {
+                        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                         e.printStackTrace(conf.ERROR_STREAM());
                     }
                     break;
@@ -117,10 +116,11 @@ public class Crawler extends Thread
         }
     }
 
-    public void shutdown()
+    private void shutdown()
     {
         if(state)
         {
+            tweets.save();
             crawler.stop();
             sc.close();
             server.close();

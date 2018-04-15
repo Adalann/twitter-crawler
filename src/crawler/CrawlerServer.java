@@ -29,7 +29,7 @@ class CrawlerServer extends Thread
     */
     public CrawlerServer(Garbage g)
     {
-        conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
+        this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.clients = new ArrayList<ConnectionCrawler>();
         try
         {
@@ -62,7 +62,10 @@ class CrawlerServer extends Thread
             catch(IOException e)
             {
                 if(state)
+                {
+                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                     e.printStackTrace(conf.ERROR_STREAM());
+                }
             }
         }
         close();
@@ -82,16 +85,17 @@ class CrawlerServer extends Thread
                     if(c != null)
                         c.close();
                 }
-                if(!this.server.isClosed())
-                this.server.close();
+                if(!server.isClosed())
+                    server.close();
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally
             {
-                this.state = false;
+                state = false;
             }
         }
     }
@@ -103,7 +107,7 @@ class CrawlerServer extends Thread
     {
         for(ConnectionCrawler c : clients)
         {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
     }
 

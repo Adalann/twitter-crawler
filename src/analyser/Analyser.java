@@ -59,15 +59,6 @@ public class Analyser extends Thread
                 }
             }
         }
-        //
-        // try
-        // {
-        //     server.join();
-        // }
-        // catch(InterruptedException e)
-        // {
-        //     e.printStackTrace(conf.ERROR_STREAM());
-        // }
     }
 
 }

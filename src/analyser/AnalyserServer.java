@@ -52,7 +52,10 @@ class AnalyserServer extends Thread
             catch(IOException e)
             {
                 if(state)
+                {
+                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                     e.printStackTrace(conf.ERROR_STREAM());
+                }
             }
         }
     }
@@ -70,6 +73,7 @@ class AnalyserServer extends Thread
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally
