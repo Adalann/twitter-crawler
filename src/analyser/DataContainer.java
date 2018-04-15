@@ -16,11 +16,6 @@ class DataContainer implements Serializable
     private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
     private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
-<<<<<<< HEAD
-=======
-    // private Map<String, List<String>> retweetedTweets; // entrée ID d'un compte sortie liste de ses tweets retweetés
-    // private Map<String, List<String>> retweets; // entrée ID d'un compte sortie liste de ses retweets
->>>>>>> cf20879cffca7157f68988c06c66defcbe00c0a9
     private Map<String, List<Url>> urls; // entrée ID tweet sortie String url.
     private Map<String, List<Hashtag>> hashtags; // entré hastag sortie arraylist des tweets.
     private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
@@ -89,29 +84,6 @@ class DataContainer implements Serializable
 
         if(t.retweeted_status != null)
         {
-<<<<<<< HEAD
-=======
-            // //retweetedTweets
-            // if(retweetedTweets.containsKey(t.user.id_str))
-            //     retweetedTweets.get(t.user.id_str).add(t.retweeted_status.id_str);
-            // else
-            // {
-            //     List<String> l = new ArrayList<String>();
-            //     l.add(t.retweeted_status.id_str);
-            //     retweetedTweets.put(t.user.id_str, l);
-            // }
-            //
-            // //retweets
-            // if(retweets.containsKey(t.user.id_str))
-            //     retweets.get(t.user.id_str).add(t.id_str);
-            // else
-            // {
-            //     List<String> l = new ArrayList<String>();
-            //     l.add(t.id_str);
-            //     retweets.put(t.user.id_str, l);
-            // }
-
->>>>>>> cf20879cffca7157f68988c06c66defcbe00c0a9
             // incomingNeighbors
             if(incomingNeighbors.containsKey(t.retweeted_status.user.id_str))
                 incomingNeighbors.get(t.retweeted_status.user.id_str).add(t.user.id_str);
@@ -161,19 +133,6 @@ class DataContainer implements Serializable
         return Integer.parseInt(retweetCounts.get(id));
     }
 
-<<<<<<< HEAD
-=======
-    // public List<String> getRetweetedTweets(String id)
-    // {
-    //     return retweetedTweets.get(id);
-    // }
-    //
-    // public List<String> getRetweets(String id)
-    // {
-    //     return retweets.get(id);
-    // }
-
->>>>>>> cf20879cffca7157f68988c06c66defcbe00c0a9
     public List<String> getIncomingNeighbors(String id)
     {
         return incomingNeighbors.get(id);

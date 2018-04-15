@@ -32,7 +32,7 @@ public class ConfigurationAnalyser extends Configuration
                 int i = 1;
                 while(f.exists())
                 {
-                    f = new File("error_log_analyser_" + i++ + ".txt");
+                    f = new File("../error_log_analyser_" + i++ + ".txt");
                 }
                 System.out.println("Error filename : " + f.getName());
                 ERROR_STREAM = new PrintStream(f);

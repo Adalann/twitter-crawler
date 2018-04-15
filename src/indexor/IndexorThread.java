@@ -94,7 +94,7 @@ class IndexorThread extends Thread
                     if(tweet != null && !tweetString.equals(""))
                     {
                         outAnalyser.writeObject(tweet);
-                        System.out.println("JOSN : " + tweetString + "\n");
+                        // System.out.println("JOSN : " + tweetString + "\n");
                     }
                 }
                 catch(IOException e)

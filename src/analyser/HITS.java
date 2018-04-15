@@ -8,7 +8,6 @@
 package analyser;
 
 import java.util.*;
-import java.io.*;
 
 class HITS extends Thread
 {
@@ -37,11 +36,11 @@ class HITS extends Thread
                 user.auth = 0;
                 for(UserHITS neighbor : generateIncomingNeighbors(user.id))
                     user.auth += neighbor.hub;
-                norm = user.auth * user.auth;
+                norm += user.auth * user.auth;
             }
             norm = Math.sqrt(norm);
             for(UserHITS user : users)
-                user.auth = user.auth / norm;
+                    user.auth = user.auth / norm;
             norm = 0;
 
             for(UserHITS user : users)
@@ -92,14 +91,6 @@ class HITS extends Thread
         for(UserHITS user : users)
         {
             System.out.println(user);
-            try
-            {
-                System.in.read();
-            }
-            catch(IOException e)
-            {
-                e.printStackTrace();
-            }
         }
     }
 
