@@ -15,25 +15,39 @@ import common.*;
 class IndexorThread extends Thread
 {
     private static final int CONF_CODE = 1;
+    private static int index = 0;
+    private static int nbInstance = 1;
     private Socket socketCrawler;
     private Socket socketAnalyser;
     private boolean state;
     private ConfigurationIndexor conf;
-    private int index;
 
     private BufferedReader inCrawler;
     private PrintWriter outCrawler;
 
     private ObjectOutputStream outAnalyser;
 
+    // private String color;
+
     /**
     *   Constructeur de la classe, initialise les flux à partir du socket passé en paramètre.
     *   @param s    Le socket de la connexions avec le serveur.
     */
-    public IndexorThread(Socket sC, Socket sA)
+    public IndexorThread()
     {
         this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
-        this.socketCrawler = sC;
+
+        try
+        {
+            this.socketCrawler = new Socket(conf.HOSTNAME_CRAWLER, conf.PORT_CRAWLER);
+            System.out.println(conf.ANSI_GREEN + "Connection to the crawler established." + conf.ANSI_RESET);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "Impossible to reach the crawler, check your connection and your configuration" + conf.ANSI_RESET);
+            this.socketCrawler = null;
+        }
         try
         {
             inCrawler = new BufferedReader(new InputStreamReader(socketCrawler.getInputStream()));
@@ -43,7 +57,18 @@ class IndexorThread extends Thread
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
-        this.socketAnalyser = sA;
+
+        try
+        {
+            this.socketAnalyser = new Socket(conf.HOSTNAME_ANALYSER, conf.PORT_ANALYSER);
+            System.out.println(conf.ANSI_GREEN + "Connection to the analyser established." + conf.ANSI_RESET);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "Impossible to reach the analyser, check your connection and your configuration" + conf.ANSI_RESET);
+            this.socketAnalyser = null;
+        }
         try
         {
             outAnalyser = new ObjectOutputStream(socketAnalyser.getOutputStream());
@@ -52,8 +77,14 @@ class IndexorThread extends Thread
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
+
+        // if(nbInstance == 1)
+        //     color = conf.ANSI_YELLOW;
+        // else
+        //     color = conf.ANSI_PURPLE;
+
+        this.setName("IndexorThread-" + nbInstance++);
         this.state = false;
-        this.index = 0;
     }
 
     /**
@@ -63,6 +94,7 @@ class IndexorThread extends Thread
     public void run()
     {
         state = true;
+        System.out.println(conf.ANSI_BLUE + getName() + " started." + conf.ANSI_RESET);
         String tweetString = "";
         while(state)
         {
@@ -86,7 +118,7 @@ class IndexorThread extends Thread
                     if(tweet != null && !tweetString.equals(""))
                     {
                         outAnalyser.writeObject(tweet);
-                        // System.out.println("JOSN : " + tweetString + "\n");
+                        // System.out.println(getName() + color + "JOSN : " + tweetString + "\n" + conf.ANSI_RESET);
                     }
                 }
                 catch(IOException e)
@@ -138,6 +170,9 @@ class IndexorThread extends Thread
                 inCrawler.close();
                 outCrawler.close();
                 socketCrawler.close();
+
+                outAnalyser.close();
+                socketAnalyser.close();
             }
             catch(IOException e)
             {
@@ -147,11 +182,12 @@ class IndexorThread extends Thread
             finally
             {
                 this.state = false;
+                System.out.println(conf.ANSI_BLUE + getName() + " stoped." + conf.ANSI_RESET);
             }
         }
     }
 
-    public int getIndex()
+    public static int getIndex()
     {
         return index;
     }

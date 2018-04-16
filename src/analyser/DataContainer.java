@@ -191,11 +191,13 @@ class DataContainer implements Serializable
             DataContainer restoredObject = (DataContainer)restoreStream.readObject();
             if(restoredObject != null)
             {
-                this.retweetCounts = new HashMap(restoredObject.retweetCounts);
-                this.urls = new HashMap(restoredObject.urls);
-                this.hashtags = new HashMap(restoredObject.hashtags);
-                this.idToNames = new HashMap(restoredObject.idToNames);
-                this.idToTweets = new HashMap(restoredObject.idToTweets);
+                this.retweetCounts = new HashMap<String, String>(restoredObject.retweetCounts);
+                this.urls = new HashMap<String, List<Url>>(restoredObject.urls);
+                this.hashtags = new HashMap<String, List<Hashtag>>(restoredObject.hashtags);
+                this.idToNames = new HashMap<String, String>(restoredObject.idToNames);
+                this.idToTweets = new HashMap<String, List<String>>(restoredObject.idToTweets);
+                this.incomingNeighbors = new HashMap<String, List<String>>(restoredObject.incomingNeighbors);
+                this.outcomingNeighbors = new HashMap<String, List<String>>(restoredObject.outcomingNeighbors);
             }
             System.out.println(conf.ANSI_GREEN + "Restored  whit success." + conf.ANSI_RESET);
         }

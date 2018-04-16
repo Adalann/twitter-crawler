@@ -42,10 +42,14 @@ public class Analyser extends Thread
             String q = sc.nextLine().toLowerCase();
             switch(q)
             {
+                case "help":
+                {
+                    System.out.println();
+                }
                 case "start":
                 {
                     hits.start();
-                    System.out.println("HITS started");
+                    System.out.println(conf.ANSI_BLUE + "HITS started" + conf.ANSI_RESET);
                     break;
                 }
                 case "stop":
@@ -55,7 +59,7 @@ public class Analyser extends Thread
                 }
                 default:
                 {
-                    System.out.println("incorrect");
+                    System.out.println("Type 'help' to print the available commands");
                 }
             }
         }

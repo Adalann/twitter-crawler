@@ -29,7 +29,7 @@ public class ConfigFactory
             }
             catch(FileNotFoundException e)
             {
-                System.out.println(conf.ANSI_RED + "Configuration file not found !" + conf.ANSI_RESET);
+                System.out.println("Configuration file not found !");
                 e.printStackTrace();
             }
             Configuration conf = null;

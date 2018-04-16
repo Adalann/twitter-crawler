@@ -52,7 +52,7 @@ class ConnectionCrawler extends Connection
     @Override
     public void run()
     {
-        tate = true;
+        state = true;
         try
         {
             String query = "";
