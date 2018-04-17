@@ -18,14 +18,12 @@ class IndexorThread extends Thread
     private static int index = 0;
     private static int nbInstance = 1;
     private Socket socketCrawler;
-    private Socket socketAnalyser;
-    private boolean state;
     private ConfigurationIndexor conf;
-
     private BufferedReader inCrawler;
     private PrintWriter outCrawler;
-
+    private Socket socketAnalyser;
     private ObjectOutputStream outAnalyser;
+    private boolean state;
 
     // private String color;
 
@@ -36,46 +34,31 @@ class IndexorThread extends Thread
     public IndexorThread()
     {
         this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
-
         try
         {
             this.socketCrawler = new Socket(conf.HOSTNAME_CRAWLER, conf.PORT_CRAWLER);
-            System.out.println(conf.ANSI_GREEN + "Connection to the crawler established." + conf.ANSI_RESET);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-            System.out.println(conf.ANSI_RED + "Impossible to reach the crawler, check your connection and your configuration" + conf.ANSI_RESET);
-            this.socketCrawler = null;
-        }
-        try
-        {
+            System.out.println(conf.ANSI_GREEN + "[" + getName() + "] Connection to the crawler established." + conf.ANSI_RESET);
             inCrawler = new BufferedReader(new InputStreamReader(socketCrawler.getInputStream()));
             outCrawler = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCrawler.getOutputStream())), true);
         }
         catch(IOException e)
         {
             e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "[" + getName() + "] Impossible to reach the crawler, check your connection and your configuration" + conf.ANSI_RESET);
+            this.socketCrawler = null;
         }
 
         try
         {
             this.socketAnalyser = new Socket(conf.HOSTNAME_ANALYSER, conf.PORT_ANALYSER);
-            System.out.println(conf.ANSI_GREEN + "Connection to the analyser established." + conf.ANSI_RESET);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-            System.out.println(conf.ANSI_RED + "Impossible to reach the analyser, check your connection and your configuration" + conf.ANSI_RESET);
-            this.socketAnalyser = null;
-        }
-        try
-        {
+            System.out.println(conf.ANSI_GREEN + "[" + getName() + "] Connection to the analyser established." + conf.ANSI_RESET);
             outAnalyser = new ObjectOutputStream(socketAnalyser.getOutputStream());
         }
         catch(IOException e)
         {
             e.printStackTrace(conf.ERROR_STREAM());
+            System.out.println(conf.ANSI_RED + "[" + getName() + "] Impossible to reach the analyser, check your connection and your configuration" + conf.ANSI_RESET);
+            this.socketAnalyser = null;
         }
 
         // if(nbInstance == 1)
@@ -94,40 +77,46 @@ class IndexorThread extends Thread
     public void run()
     {
         state = true;
-        System.out.println(conf.ANSI_BLUE + getName() + " started." + conf.ANSI_RESET);
-        String tweetString = "";
-        while(state)
+        if(socketCrawler != null && socketAnalyser != null)
         {
-            tweetString = requestNextTweet();
-            if(tweetString == null)
+            // System.out.println("\n" + conf.ANSI_BLUE + getName() + " started." + conf.ANSI_RESET);
+            String tweetString = "";
+            while(state)
             {
-                System.out.println(conf.ANSI_RED + "Connection to the crawler server lost, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
-                close();
-            }
-            else if(tweetString.equals("STOP"))
-            {
-                System.out.println(conf.ANSI_BLUE + "Tweet limit reached, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
-                close();
-            }
-            else
-            {
-                Gson gson = new GsonBuilder().create();
-                Tweet tweet = gson.fromJson(tweetString, Tweet.class);
-                try
+                synchronized(this)
                 {
-                    if(tweet != null && !tweetString.equals(""))
+                    tweetString = requestNextTweet();
+                    if(tweetString == null)
                     {
-                        outAnalyser.writeObject(tweet);
-                        // System.out.println(getName() + color + "JOSN : " + tweetString + "\n" + conf.ANSI_RESET);
+                        System.out.println("\n" + conf.ANSI_RED + "[" + getName() + "] Connection to the crawler server lost, stoping the thread" + conf.ANSI_RESET);
+                        close();
+                    }
+                    else if(tweetString.equals("STOP"))
+                    {
+                        System.out.println("\n" + conf.ANSI_BLUE + "Tweet limit reached, stoping the thread" + conf.ANSI_RESET);
+                        close();
+                    }
+                    else
+                    {
+                        Gson gson = new GsonBuilder().create();
+                        Tweet tweet = gson.fromJson(tweetString, Tweet.class);
+                        try
+                        {
+                            if(tweet != null && !tweetString.equals(""))
+                            {
+                                outAnalyser.writeObject(tweet);
+                                // System.out.println(getName() + color + "JOSN : " + tweetString + "\n" + conf.ANSI_RESET);
+                            }
+                        }
+                        catch(IOException e)
+                        {
+                            e.printStackTrace(conf.ERROR_STREAM());
+                            System.out.println("\n" + conf.ANSI_RED + "[" + getName() + "] Connection to the analyser server lost, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
+                            close();
+                        }
                     }
                 }
-                catch(IOException e)
-                {
-                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
-                    e.printStackTrace(conf.ERROR_STREAM());
-                }
             }
-
         }
     }
 
@@ -143,9 +132,7 @@ class IndexorThread extends Thread
             outCrawler.println("NEXT");
             s = inCrawler.readLine();
             if(s == null)
-            {
                 return null;
-            }
             else if(!s.equals(""))
                 index++;
         }
@@ -169,10 +156,18 @@ class IndexorThread extends Thread
                 outCrawler.println("STOP");
                 inCrawler.close();
                 outCrawler.close();
-                socketCrawler.close();
+                if(socketCrawler.isConnected())
+                    socketCrawler.close();
 
                 outAnalyser.close();
-                socketAnalyser.close();
+                if(socketAnalyser.isConnected())
+                    socketAnalyser.close();
+
+            }
+            catch(NullPointerException e)
+            {
+                // Est levée si le client n'était pas connecté aux serveurs
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(IOException e)
             {
@@ -185,6 +180,14 @@ class IndexorThread extends Thread
                 System.out.println(conf.ANSI_BLUE + getName() + " stoped." + conf.ANSI_RESET);
             }
         }
+    }
+
+    // Test de syncronisation
+    public synchronized boolean state()
+    {
+        if(state)
+            notify();
+        return state;
     }
 
     public static int getIndex()

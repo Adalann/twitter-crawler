@@ -3,6 +3,9 @@ __author__ = "Theo Martos"
 
 import os
 
+if not os.path.exists('bin'):
+    os.mkdir('bin')
+
 print("Compiling...")
 res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar:./src ./src/RunCrawler.java")
 if(res == 0):

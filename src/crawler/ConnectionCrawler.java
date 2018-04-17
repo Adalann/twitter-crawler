@@ -61,7 +61,7 @@ class ConnectionCrawler extends Connection
                 query = in.readLine();
                 if (query == null)
                 {
-                    System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                    System.out.println(conf.ANSI_RED + "Connection this " + this.getName() + " lost." + conf.ANSI_RESET);
                     close();
                     break;
                 }
@@ -74,6 +74,8 @@ class ConnectionCrawler extends Connection
                     }
                     case "STOP":
                     {
+                        System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                        close();
                         state = false;
                         break;
                     }
@@ -83,10 +85,8 @@ class ConnectionCrawler extends Connection
         catch(IOException e)
         {
             if(state)
-            {
                 System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
-                e.printStackTrace(conf.ERROR_STREAM());
-            }
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {
@@ -102,6 +102,7 @@ class ConnectionCrawler extends Connection
     {
         if(state)
         {
+            state = false;
             try
             {
                 in.close();
@@ -113,10 +114,6 @@ class ConnectionCrawler extends Connection
             {
                 System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
-            }
-            finally
-            {
-                state = false;
             }
         }
     }

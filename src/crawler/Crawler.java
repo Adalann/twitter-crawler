@@ -74,6 +74,11 @@ public class Crawler extends Thread
                     tweets.save();
                     break;
                 }
+                case "showconf":
+                {
+                    System.out.println(conf);
+                    break;
+                }
                 case "startc": // Démarre le crawler avec le filtre définit dans le fichier de configuration
                 {
                     crawler.start(conf.FILTER);
@@ -105,7 +110,7 @@ public class Crawler extends Thread
                 }
                 case "help": // Affiche la liste des commandes et leurs descriptions
                 {
-                    System.out.println("help : show this help\nsave : save the tweets already captured in a output.data file\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
+                    System.out.println("listcl : list the connected clients\nhelp : show this help\nsave : save the tweets already captured in a output.data file\nshowconf : display the current configuration\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
                     break;
                 }
                 default:

@@ -45,6 +45,11 @@ class ConnectionAnalyser extends Connection
                 if(tweet != null)
                     dataContainer.add(tweet);
             }
+            catch(EOFException e)
+            {
+                System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                close();
+            }
             catch(ClassNotFoundException e)
             {
                 System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);

@@ -7,20 +7,26 @@
 
 package analyser;
 
+import common.*;
 import java.util.*;
+import java.io.*;
 
 class HITS extends Thread
 {
     private static final int CONF_CODE = 2;
+    private ConfigurationAnalyser conf;
     private DataContainer data;
     private List<UserHITS> users;
     private int K;
+    private int compareMode; // Entier qui indique si on compare par rapport au score de auth ou de hub => -1 pour auth, 1 pour hub et 0 pour des résultats bruts
 
     public HITS(DataContainer d, int k)
     {
+        this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         this.data = d;
         this.users = new ArrayList<UserHITS>();
         this.K = k;
+        this.compareMode = false;
     }
 
     public void run()
@@ -53,9 +59,9 @@ class HITS extends Thread
             norm += Math.sqrt(norm);
             for(UserHITS user : users)
                 user.hub = user.hub / norm;
-
-            displayResults(i);
         }
+
+        System.out.println(conf.ANSI_BLUE + "HITS done." + conf.ANSI_RESET);
     }
 
     private List<UserHITS> generateIncomingNeighbors(String idUser)
@@ -84,16 +90,51 @@ class HITS extends Thread
         return outcomingNeighbors;
     }
 
-    public void displayResults(int i)
+    public void writeResults()
     {
-        System.out.println("STEP " + i);
-        for(UserHITS user : users)
+
+        PrintWriter writer = null;
+        String filename = "";
+        if(compareMode == -1)
+            filename = "../authResults.txt";
+        else if(compareMode == 1)
+            filename = "../hubResults.txt";
+        else
+            filename = "../rawResults.txt";
+
+        try
         {
-            System.out.println(user);
+            writer = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+            for(UserHITS user : users)
+                writer.println(user);
+            System.out.println("Successfully generated a rawResults.txt.");
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
+        finally
+        {
+            if(writer != null)
+                writer.close();
         }
     }
 
-    class UserHITS
+    public void authSortedResults()
+    {
+        compareMode = false;
+        Collections.sort(users);
+        writeResults();
+    }
+
+    public void hubSortedResults()
+    {
+        compareMode = true;
+        Collections.sort(users);
+        writeResults();
+    }
+
+    class UserHITS implements Comparable<UserHITS>
     {
         String id;
         String name;
@@ -114,9 +155,35 @@ class HITS extends Thread
         }
 
         @Override
+        public int compareTo(UserHITS u)
+        {
+            int result;
+            if(compareMode == 1) // Mode hub
+            {
+                if(this.hub > u.hub) // On veut trier de manière décroissante pour que le plus grand soit en haut de la liste
+                    result = -1;
+                else if(this.hub == u.hub)
+                    result = 0;
+                else
+                    result = 1;
+            }
+            else
+            {
+                if(this.auth > u.auth) // Meme remarque
+                    result = -1;
+                else if(this.auth == u.auth)
+                    result = 0;
+                else
+                    result = 1;
+            }
+
+            return result;
+        }
+
+        @Override
         public String toString()
         {
-            return name + " :\n\tAuth score : " + auth + "\n\tHub score : " + hub + "\n\n";
+            return name + " => Auth score : " + auth + " | Hub score : " + hub;
         }
     }
 }

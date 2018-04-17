@@ -46,6 +46,21 @@ public class Analyser extends Thread
                 {
                     System.out.println();
                 }
+                case "savedata":
+                {
+                    dataContainer.save();
+                    break;
+                }
+                case "authresults":
+                {
+                    hits.authSortedResults();
+                    break;
+                }
+                case "hubresults":
+                {
+                    hits.hubSortedResults();
+                    break;
+                }
                 case "start":
                 {
                     hits.start();
@@ -54,7 +69,7 @@ public class Analyser extends Thread
                 }
                 case "stop":
                 {
-                    state = false;
+                    shutdow();
                     break;
                 }
                 default:
@@ -63,6 +78,13 @@ public class Analyser extends Thread
                 }
             }
         }
+    }
+
+    public void shutdow()
+    {
+        server.close();
+        sc.close();
+        state = false;
     }
 
 }
