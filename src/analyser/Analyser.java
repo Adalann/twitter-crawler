@@ -3,6 +3,7 @@
 *   @author Jules Perret
 *
 *   Classe Principale du module d'analyse
+*   Gère l'interface console et exécute les actions
 **/
 
 package analyser;
@@ -21,6 +22,9 @@ public class Analyser extends Thread
     private Scanner sc;
     private boolean state;
 
+    /**
+    *   Constructeur de la classe, initialise les attributs.
+    */
     public Analyser()
     {
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
@@ -31,6 +35,9 @@ public class Analyser extends Thread
         this.state = false;
     }
 
+    /**
+    *   Méthode run du la classe Thread, contient la boucle pour l'interface qui lit les commandes de l'utilisateur
+    */
     public void run()
     {
         state = true;
@@ -39,6 +46,7 @@ public class Analyser extends Thread
         while(state)
         {
             System.out.print("> ");
+
             String q = sc.nextLine().toLowerCase();
             switch(q)
             {

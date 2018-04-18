@@ -18,7 +18,7 @@ class HITS extends Thread
     private DataContainer data;
     private List<UserHITS> users;
     private int K;
-    private int compareMode; // Entier qui indique si on compare par rapport au score de auth ou de hub => -1 pour auth, 1 pour hub et 0 pour des résultats bruts
+    private boolean compareMode; // Boolean qui indique si on compare par rapport au score de auth ou de hub => false pour auth, true pour hub
 
     public HITS(DataContainer d, int k)
     {
@@ -84,7 +84,7 @@ class HITS extends Thread
         if(dataFromContainer != null)
         {
             for(String id : data.getOutcomingNeighbors(idUser))
-            outcomingNeighbors.add(new UserHITS(id));
+                outcomingNeighbors.add(new UserHITS(id));
         }
 
         return outcomingNeighbors;
@@ -95,19 +95,17 @@ class HITS extends Thread
 
         PrintWriter writer = null;
         String filename = "";
-        if(compareMode == -1)
-            filename = "../authResults.txt";
-        else if(compareMode == 1)
+        if(compareMode)
             filename = "../hubResults.txt";
         else
-            filename = "../rawResults.txt";
+            filename = "../authResults.txt";
 
         try
         {
             writer = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
             for(UserHITS user : users)
                 writer.println(user);
-            System.out.println("Successfully generated a rawResults.txt.");
+            System.out.println(conf.ANSI_GREEN + "Successfully generated results !" + conf.ANSI_RED);
         }
         catch(IOException e)
         {
@@ -158,7 +156,7 @@ class HITS extends Thread
         public int compareTo(UserHITS u)
         {
             int result;
-            if(compareMode == 1) // Mode hub
+            if(compareMode) // Mode hub
             {
                 if(this.hub > u.hub) // On veut trier de manière décroissante pour que le plus grand soit en haut de la liste
                     result = -1;
