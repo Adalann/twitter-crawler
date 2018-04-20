@@ -43,6 +43,15 @@ public class Analyser extends Thread
         state = true;
         server.start();
 
+        try
+        {
+            Thread.sleep(5); // Temporisation pour raison d'affichage
+        }
+        catch(InterruptedException e)
+        {
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
+
         while(state)
         {
             System.out.print("> ");

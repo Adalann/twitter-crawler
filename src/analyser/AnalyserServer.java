@@ -20,6 +20,7 @@ class AnalyserServer extends Thread
     private DataContainer dataContainer;
     private ConfigurationAnalyser conf;
     private boolean state;
+    private Analyser main;
 
     public AnalyserServer(DataContainer d)
     {
@@ -40,10 +41,9 @@ class AnalyserServer extends Thread
     @Override
     public void run()
     {
-        synchronized(System.out)
-        {
-            System.out.println(conf.ANSI_GREEN + "Server started." + conf.ANSI_RESET);
-        }
+
+        System.out.println(conf.ANSI_GREEN + "Server started." + conf.ANSI_RESET);
+
         state = true;
         while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
         {
@@ -95,10 +95,4 @@ class AnalyserServer extends Thread
         }
     }
 
-    public boolean isReady()
-    {
-        if(state)
-            notify();
-        return true;
-    }
 }
