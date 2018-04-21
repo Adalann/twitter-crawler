@@ -35,6 +35,7 @@ public class ConfigFactory
             Configuration conf = null;
             switch(conf_code)
             {
+                // La méthode fromJson de la librairie permet de créer une instance en passant en paramètre le JsonReader et la classe désirée
                 case 0:
                 {
                     conf = gson.fromJson(reader, ConfigurationCrawler.class);
@@ -51,9 +52,8 @@ public class ConfigFactory
                     break;
                 }
             }
-            return conf;
+            confInstance = conf;
         }
-        else
-            return confInstance;
+        return confInstance;
     }
 }

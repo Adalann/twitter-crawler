@@ -11,6 +11,7 @@ import java.io.PrintStream;
 
 public abstract class Configuration
 {
+    // Constantes pour l'affichage coloré dans la console
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -21,6 +22,7 @@ public abstract class Configuration
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
+    // Flux qui sera utilisé pour écrire les stack tarce dans des fichiers afin de garder la console le plus propre possible
     protected static PrintStream ERROR_STREAM = null;
 
     @Override

@@ -2,6 +2,6 @@
     "PORT" : 2201,
     "CLIENT_LIMIT" : -1,
     "SAVEFILE_NAME" : "save.data",
-    "RESTOREFILE_NAME" : "test.data",
-    "RESTORE_ON_START" : false
+    "RESTOREFILE_NAME" : "hashtables-final.data",
+    "RESTORE_ON_START" : true
 }

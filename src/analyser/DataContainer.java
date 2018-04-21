@@ -26,14 +26,22 @@ class DataContainer implements Serializable
 
     public DataContainer()
     {
-        this.retweetCounts = new HashMap<String, String>();
-        this.urls = new HashMap<String, List<Url>>();
-        this.hashtags = new HashMap<String, List<Hashtag>>();
-        this.idToNames = new HashMap<String, String>();
-        this.idToTweets = new HashMap<String, List<String>>();
+        ConfigurationAnalyser conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
+        if(conf.RESTORE_ON_START)
+        {
+            restore();
+        }
+        else
+        {
+            this.retweetCounts = new HashMap<String, String>();
+            this.urls = new HashMap<String, List<Url>>();
+            this.hashtags = new HashMap<String, List<Hashtag>>();
+            this.idToNames = new HashMap<String, String>();
+            this.idToTweets = new HashMap<String, List<String>>();
 
-        this.incomingNeighbors = new HashMap<String, List<String>>();
-        this.outcomingNeighbors = new HashMap<String, List<String>>();
+            this.incomingNeighbors = new HashMap<String, List<String>>();
+            this.outcomingNeighbors = new HashMap<String, List<String>>();
+        }
     }
 
     public synchronized void add(Tweet t)
@@ -49,7 +57,7 @@ class DataContainer implements Serializable
             hashtags.put(rt.id_str, new ArrayList<Hashtag>(Arrays.asList(rt.entities.hashtags)));
 
             if(!idToNames.containsKey(rt.user.id_str))
-            idToNames.put(rt.user.id_str, rt.user.screen_name);
+                idToNames.put(rt.user.id_str, rt.user.screen_name);
 
             List<String> listTweet = idToTweets.get(rt.user.id_str);
             if(listTweet != null && listTweet.indexOf(rt.id_str) == -1)
@@ -171,8 +179,9 @@ class DataContainer implements Serializable
         ConfigurationAnalyser conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         try
         {
-            ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream(conf.SAVEFILE_NAME));
+            ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("../" + conf.SAVEFILE_NAME));
             saveStream.writeObject(this);
+            System.out.println(conf.ANSI_GREEN + "Successfully saved dataContainer !" + conf.ANSI_RESET);
         }
         catch(IOException e)
         {
@@ -187,7 +196,7 @@ class DataContainer implements Serializable
         System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
         try
         {
-            ObjectInputStream restoreStream = new ObjectInputStream(new FileInputStream(conf.RESTOREFILE_NAME));
+            ObjectInputStream restoreStream = new ObjectInputStream(new FileInputStream("../" + conf.RESTOREFILE_NAME));
             DataContainer restoredObject = (DataContainer)restoreStream.readObject();
             if(restoredObject != null)
             {
@@ -199,7 +208,7 @@ class DataContainer implements Serializable
                 this.incomingNeighbors = new HashMap<String, List<String>>(restoredObject.incomingNeighbors);
                 this.outcomingNeighbors = new HashMap<String, List<String>>(restoredObject.outcomingNeighbors);
             }
-            System.out.println(conf.ANSI_GREEN + "Restored  whit success." + conf.ANSI_RESET);
+            System.out.println(conf.ANSI_GREEN + "Restored  with success." + conf.ANSI_RESET);
         }
         catch(FileNotFoundException e)
         {

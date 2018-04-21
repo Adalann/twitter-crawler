@@ -76,6 +76,7 @@ class IndexorThread extends Thread
         {
             // System.out.println("\n" + conf.ANSI_BLUE + getName() + " started." + conf.ANSI_RESET);
             String tweetString = "";
+            Gson gson = new GsonBuilder().create();
             while(state)
             {
                 synchronized(this) // Permet de s'assurer que le tweet en cours de traitement à bien été envoyé à
@@ -93,10 +94,9 @@ class IndexorThread extends Thread
                     }
                     else if(!tweetString.equals(""))
                     {
-                        Gson gson = new GsonBuilder().create();
-                        Tweet tweet = gson.fromJson(tweetString, Tweet.class);
                         try
                         {
+                            Tweet tweet = gson.fromJson(tweetString, Tweet.class);
                             if(tweet != null)
                             {
                                 outAnalyser.writeObject(tweet);
@@ -108,6 +108,10 @@ class IndexorThread extends Thread
                             e.printStackTrace(conf.ERROR_STREAM());
                             System.out.println("\n" + conf.ANSI_RED + "[" + getName() + "] Connection to the analyser server lost, closing the indexor, please press [ENTER]" + conf.ANSI_RESET);
                             close();
+                        }
+                        catch(JsonSyntaxException e)
+                        {
+                            e.printStackTrace(conf.ERROR_STREAM());
                         }
                     }
                 }

@@ -21,12 +21,12 @@ public class ConfigurationCrawler extends Configuration
 
     public ConfigurationCrawler()
     {
-        this.PORT = -1;
+        this.PORT = 2200;
         this.CLIENT_LIMIT = -1;
-        this.FILTER = "";
+        this.FILTER = "#twitter";
         this.TWEET_LIMIT = -1;
-        this.SAVEFILE_NAME = "";
-        this.RESTOREFILE_NAME = "";
+        this.SAVEFILE_NAME = "output.data";
+        this.RESTOREFILE_NAME = "restore.data";
         this.RESTORE_ON_START = false;
         if(ERROR_STREAM == null)
         {

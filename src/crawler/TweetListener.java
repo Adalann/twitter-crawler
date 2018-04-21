@@ -36,10 +36,10 @@ class TweetListener implements StatusListener
     *   Démarre le crawler avec le filtre passé en paramètre
     *   @param f   Le filtre à appliquer pour la récupération des tweets
     */
-    public void start(String f)
+    public void start()
     {
         twitter.addListener(this);
-        twitter.filter(f);
+        twitter.filter(conf.FILTER);
         state = true;
     }
 
@@ -62,14 +62,14 @@ class TweetListener implements StatusListener
         return tweets.size();
     }
 
-    /**
-    *   Retourne l'instace de garbage du crawler
-    *   @return l'instace du garbage
-    */
-    public Garbage getGarbage()
-    {
-        return tweets;
-    }
+    // /**
+    // *   Retourne l'instace de garbage du crawler
+    // *   @return l'instace du garbage
+    // */
+    // public Garbage getGarbage()
+    // {
+    //     return tweets;
+    // }
 
     /**
     *   Retourne l'état du crawler, false pour arrêté et true pour un fonction

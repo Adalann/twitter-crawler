@@ -62,10 +62,6 @@ public class Analyser extends Thread
                 case "help":
                 {
                     System.out.println();
-                }
-                case "savedata":
-                {
-                    dataContainer.save();
                     break;
                 }
                 case "authresults":
@@ -76,6 +72,11 @@ public class Analyser extends Thread
                 case "hubresults":
                 {
                     hits.hubSortedResults();
+                    break;
+                }
+                case "savedata":
+                {
+                    dataContainer.save();
                     break;
                 }
                 case "start":

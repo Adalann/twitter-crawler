@@ -20,7 +20,6 @@ class AnalyserServer extends Thread
     private DataContainer dataContainer;
     private ConfigurationAnalyser conf;
     private boolean state;
-    private Analyser main;
 
     public AnalyserServer(DataContainer d)
     {

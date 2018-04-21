@@ -21,6 +21,9 @@ public class Crawler extends Thread
     private ConfigurationCrawler conf;
     private boolean state;
 
+    /**
+    *   Constructeur de la classe qui initialise les Threads ainsi que le Scanner et la configuration
+    */
     public Crawler()
     {
         this.tweets = new Garbage();
@@ -37,7 +40,7 @@ public class Crawler extends Thread
 
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");
-        crawler.start(conf.FILTER);
+        crawler.start();
         System.out.println(conf.ANSI_GREEN + "Crawler started !" + conf.ANSI_RESET);
 
         // Temporisation pour une raison d'interface
@@ -86,7 +89,7 @@ public class Crawler extends Thread
                 }
                 case "startc": // Démarre le crawler avec le filtre définit dans le fichier de configuration
                 {
-                    crawler.start(conf.FILTER);
+                    crawler.start();
                     try
                     {
                         Thread.sleep(5000);
@@ -126,7 +129,7 @@ public class Crawler extends Thread
         }
     }
 
-    private void shutdown()
+    public void shutdown()
     {
         if(state)
         {
