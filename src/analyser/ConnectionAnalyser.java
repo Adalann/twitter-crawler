@@ -50,12 +50,17 @@ class ConnectionAnalyser extends Connection
                 System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
                 close();
             }
-            catch(ClassNotFoundException e)
+            catch(SocketException e)
+            {
+                System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                close();
+            }
+            catch(IOException e)
             {
                 System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
-            catch(IOException e)
+            catch(ClassNotFoundException e)
             {
                 System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());

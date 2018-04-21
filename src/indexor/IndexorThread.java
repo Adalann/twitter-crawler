@@ -61,11 +61,6 @@ class IndexorThread extends Thread
             this.socketAnalyser = null;
         }
 
-        // if(nbInstance == 1)
-        //     color = conf.ANSI_YELLOW;
-        // else
-        //     color = conf.ANSI_PURPLE;
-
         this.setName("IndexorThread-" + nbInstance++);
         this.state = false;
     }
@@ -83,8 +78,8 @@ class IndexorThread extends Thread
             String tweetString = "";
             while(state)
             {
-                synchronized(this)
-                {
+                synchronized(this) // Permet de s'assurer que le tweet en cours de traitement à bien été envoyé à
+                {                  // l'analyser quand on stop le thread
                     tweetString = requestNextTweet();
                     if(tweetString == null)
                     {
@@ -96,13 +91,13 @@ class IndexorThread extends Thread
                         System.out.println("\n" + conf.ANSI_BLUE + "Tweet limit reached, stoping the thread" + conf.ANSI_RESET);
                         close();
                     }
-                    else
+                    else if(!tweetString.equals(""))
                     {
                         Gson gson = new GsonBuilder().create();
                         Tweet tweet = gson.fromJson(tweetString, Tweet.class);
                         try
                         {
-                            if(tweet != null && !tweetString.equals(""))
+                            if(tweet != null)
                             {
                                 outAnalyser.writeObject(tweet);
                                 // System.out.println(getName() + color + "JOSN : " + tweetString + "\n" + conf.ANSI_RESET);

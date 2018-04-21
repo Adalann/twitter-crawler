@@ -17,9 +17,9 @@ import common.*;
 class Garbage
 {
     private static final int CONF_CODE = 0;
+    private static int index = 0;  // L'attribut de classe index indique quel est le numéro dans la liste du prochain JSON à traiter dans la liste tweet
     private List<String> tweets;
     private ConfigurationCrawler conf;
-    private int index;  // L'attribut index indique quel est le numéro dans la liste du prochain JSON à traiter dans la liste tweet
 
     /**
     *   Constructeur de la classe, instancie une ArrayList vide, récupère une instance de configuration et initie index à zero
@@ -32,7 +32,6 @@ class Garbage
         {
             restore();
         }
-        this.index = 0;
     }
 
     /**
@@ -82,15 +81,6 @@ class Garbage
     }
 
     /**
-    *   Méthode pour récupérer le dernier élément de la liste.
-    *   @return     Le dernier élément de la liste de tweets.
-    */
-    public synchronized String getLastElement()
-    {
-        return getElementAt(tweets.size() - 1);
-    }
-
-    /**
     *   Méthode utilisée par les indexeurs pour récupérer le prochain élément de la liste à traiter, indiqué par l'attribut index.
     *   @return     Le prochain élément à traiter ou un sigbal d'arrêt pour les indexeurs
     */
@@ -111,6 +101,11 @@ class Garbage
     public synchronized int size()
     {
         return tweets.size();
+    }
+
+    public int index()
+    {
+        return index;
     }
 
     /**

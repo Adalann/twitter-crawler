@@ -40,7 +40,7 @@ class HITS extends Thread
             for(UserHITS user : users)
             {
                 user.auth = 0;
-                for(UserHITS neighbor : generateIncomingNeighbors(user.id))
+                for(UserHITS neighbor : fetchIncomingNeighbors(user.id))
                     user.auth += neighbor.hub;
                 norm += user.auth * user.auth;
             }
@@ -52,7 +52,7 @@ class HITS extends Thread
             for(UserHITS user : users)
             {
                 user.hub = 0;
-                for(UserHITS neighbor : generateOutcomingNeighbors(user.id))
+                for(UserHITS neighbor : fetchOutcomingNeighbors(user.id))
                     user.hub += neighbor.auth;
                 norm += user.hub * user.hub;
             }
@@ -64,7 +64,7 @@ class HITS extends Thread
         System.out.println(conf.ANSI_BLUE + "HITS done." + conf.ANSI_RESET);
     }
 
-    private List<UserHITS> generateIncomingNeighbors(String idUser)
+    private List<UserHITS> fetchIncomingNeighbors(String idUser)
     {
         List<UserHITS> incomingNeighbors = new ArrayList<UserHITS>();
         List<String> dataFromContainer = data.getIncomingNeighbors(idUser);
@@ -77,7 +77,7 @@ class HITS extends Thread
         return incomingNeighbors;
     }
 
-    public List<UserHITS> generateOutcomingNeighbors(String idUser)
+    public List<UserHITS> fetchOutcomingNeighbors(String idUser)
     {
         List<UserHITS> outcomingNeighbors = new ArrayList<UserHITS>();
         List<String> dataFromContainer = data.getOutcomingNeighbors(idUser);
@@ -105,7 +105,7 @@ class HITS extends Thread
             writer = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
             for(UserHITS user : users)
                 writer.println(user);
-            System.out.println(conf.ANSI_GREEN + "Successfully generated results !" + conf.ANSI_RED);
+            System.out.println(conf.ANSI_GREEN + "Successfully generated results !" + conf.ANSI_RESET);
         }
         catch(IOException e)
         {

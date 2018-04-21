@@ -4,6 +4,7 @@ __author__ = "Theo Martos"
 import os
 
 if not os.path.exists('bin'):
+    print("Creating bin directory...")
     os.mkdir('bin')
 
 print("Compiling...")

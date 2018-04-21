@@ -4,12 +4,13 @@ __author__ = "Theo Martos"
 import os
 
 if not os.path.exists('bin'):
+    print("Creating bin directory...")
     os.mkdir('bin')
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/gson.jar:./src ./src/RunAnalyser.java")
+res = os.system("javac -d ./bin -cp :./lib/gson.jar:./src ./src/RunAnalyser.java")
 if(res == 0):
     print("Starting...")
-    os.system("cd ./bin && java -cp :../lib/twitter4j.jar:../lib/gson.jar:../src RunAnalyser")
+    os.system("cd ./bin && java -cp :../lib/gson.jar:../src RunAnalyser")
 else:
     print('Compilation failed, start aborded')

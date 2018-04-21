@@ -64,6 +64,11 @@ public class Crawler extends Thread
 
             switch(query)
             {
+                case "index":
+                {
+                    System.out.println(tweets.index());
+                    break;
+                }
                 case "listcl": // Affiche la liste des clients
                 {
                     server.listClients();
