@@ -103,11 +103,10 @@ class IndexorThread extends Thread
                 }
                 else if(!tweetString.equals("")) // Une chaine JSON a bien ete recue
                 {
-                    // Permet de s'assurer que le tweet en cours de traitement a bien
-                    // été envoyé a l'analyser quand on stop le thread
                     try
                     {
-                        // On s'assure que
+                        // Permet de s'assurer que le tweet en cours de traitement a bien
+                        // été envoyé a l'analyser quand on stop le thread
                         sema.acquire();
 
                         // On genere l'objet tweet
@@ -116,11 +115,12 @@ class IndexorThread extends Thread
                         {
                             // On ecrit l'objet sur le flux
                             outAnalyser.writeObject(tweet);
+                            atomicIndex.getAndIncrement();
                         }
                     }
                     catch(InterruptedException e)
                     {
-                        e.printStackTrace();
+                        e.printStackTrace(conf.ERROR_STREAM());
                     }
                     catch(IOException e)
                     {
@@ -159,13 +159,11 @@ class IndexorThread extends Thread
                 s = inCrawler.readLine();
                 if(s == null)
                     return null;
-                else if(s.startsWith("{")) // Une chaine JSON a bien ete recue
-                    atomicIndex.getAndIncrement();
             }
         }
         catch(InterruptedException e)
         {
-            e.printStackTrace();
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         catch(IOException e)
         {
@@ -190,7 +188,7 @@ class IndexorThread extends Thread
             try
             {
                 sema.acquire();
-
+                // On annonce au Crawler que l'on se deconnecte
                 outCrawler.println("STOP");
                 inCrawler.close();
                 outCrawler.close();
@@ -201,7 +199,7 @@ class IndexorThread extends Thread
             }
             catch(InterruptedException e)
             {
-                e.printStackTrace();
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(NullPointerException e)
             {

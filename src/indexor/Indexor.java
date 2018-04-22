@@ -33,25 +33,9 @@ public class Indexor extends Thread
     public void run()
     {
         state = true;
+        // On demarre les Threads crees
         for(IndexorThread thread : indexorThreads)
             thread.start();
-
-        // Test de syncronisation
-
-        // synchronized(this)
-        // {
-        //     while(!isReady())
-        //     {
-        //         try
-        //         {
-        //             wait();
-        //         }
-        //         catch(InterruptedException e)
-        //         {
-        //             e.printStackTrace(conf.ERROR_STREAM());
-        //         }
-        //     }
-        // }
 
         String query = "";
         while(state)
@@ -82,16 +66,6 @@ public class Indexor extends Thread
             }
         }
     }
-
-    // public boolean isReady()
-    // {
-    //     boolean res = true;
-    //     int i = 0;
-    //     while(i < indexorThreads.size() && res == true)
-    //         res = indexorThreads.get(i).state();
-    //
-    //     return res;
-    // }
 
     public void shutdown()
     {
