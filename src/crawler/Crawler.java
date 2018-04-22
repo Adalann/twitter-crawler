@@ -119,7 +119,15 @@ public class Crawler extends Thread
                 }
                 case "help": // Affiche la liste des commandes et leurs descriptions
                 {
-                    System.out.println("index : show the total number of tweet parsed\nlistcl : list the connected clients\nhelp : show this help\nsave : save the tweets already captured in a output.data file\nshowconf : display the current configuration\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
+                    System.out.println("index : show the total number of tweet parsed\n" +
+                                       "listcl : list the connected clients\n" +
+                                       "help : show this help\n" +
+                                       "save : save the tweets already captured in a '" + conf.SAVEFILE_NAME + "' file\n" +
+                                       "showconf : display the current configuration\n" +
+                                       "size : print the number of tweets captured so far\n" +
+                                       "startc : start the crawler\n" +
+                                       "stopc : stop the crawler\n" +
+                                       "stop : stop the application and save the data");
                     break;
                 }
                 default:
