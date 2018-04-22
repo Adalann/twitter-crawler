@@ -143,6 +143,7 @@ class IndexorThread extends Thread
         // On s'assure que les flux sont bien fermes
         close();
     }
+    
     /**
     *   Méthode qui envoie une requête au serveur pour le prochain tweet JSON à traiter
     *   @return     Le prochain tweet à traiter

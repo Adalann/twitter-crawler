@@ -20,6 +20,9 @@ public class Indexor extends Thread
     private boolean state;
     private Scanner sc;
 
+    /**
+    *   Constructeur de la classe, initialise les attributs et génère les Threads de traitement
+    */
     public Indexor()
     {
         this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
@@ -30,6 +33,9 @@ public class Indexor extends Thread
         this.sc = new Scanner(System.in);
     }
 
+    /**
+    *   Méthode run du la classe Thread, contient la boucle pour l'interface qui lit les commandes de l'utilisateur
+    */
     public void run()
     {
         state = true;
@@ -67,6 +73,9 @@ public class Indexor extends Thread
         }
     }
 
+    /**
+    *   Stop tous les Threads
+    */
     public void shutdown()
     {
         if(state)
