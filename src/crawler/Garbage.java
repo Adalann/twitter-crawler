@@ -17,7 +17,8 @@ import common.*;
 class Garbage
 {
     private static final int CONF_CODE = 0;
-    private static int index = 0;  // L'attribut de classe index indique quel est le numéro dans la liste du prochain JSON à traiter dans la liste tweet
+    // L'attribut de classe index indique quel est le numéro dans la liste du prochain JSON à traiter dans la liste tweet
+    private static int index = 0;
     private List<String> tweets;
     private ConfigurationCrawler conf;
 
@@ -29,9 +30,7 @@ class Garbage
         this.tweets = new ArrayList<String>();
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         if(conf.RESTORE_ON_START)
-        {
             restore();
-        }
     }
 
     /**
@@ -63,8 +62,7 @@ class Garbage
     */
     public synchronized void addStatusCollection(List<Status> c)
     {
-        for(Status status : c)
-            tweets.add(DataObjectFactory.getRawJSON(status).replaceAll("\n", " "));
+        tweets.addAll(DataObjectFactory.getRawJSON(status).replaceAll("\n", " "));
     }
 
     /**
@@ -98,7 +96,7 @@ class Garbage
     *   Méthode pour récupérer la taille de la liste de tweets.
     *   @return     La taille de la liste.
     */
-    public synchronized int size()
+    public int size()
     {
         return tweets.size();
     }
@@ -117,33 +115,43 @@ class Garbage
         try
         {
             System.out.print("Writing data (" + tweets.size() + " tweets)... ");
+            // Mise en place du flux pour l'ecriture
             out = new PrintWriter(new BufferedWriter(new FileWriter("../" + conf.SAVEFILE_NAME)));
+            // On ecrit le contenue de la liste dans le fichier
             for(String s : tweets)
                 out.println(s + "\n");
             System.out.println(conf.ANSI_GREEN + "OK" + conf.ANSI_RESET);
-            out.close();
         }
         catch(IOException e)
         {
             System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
+        finally
+        {
+            // Si tout c'est bien passe on ferme le flux
+            if(out != null)
+                out.close();
+        }
     }
 
     public synchronized void restore()
     {
         System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
+        BufferedReader in = null;
         try
         {
-            BufferedReader in = new BufferedReader(new FileReader("../" + conf.RESTOREFILE_NAME));
+            // On met en place le flux pour la lecture
+            in = new BufferedReader(new FileReader("../" + conf.RESTOREFILE_NAME));
             String line = "";
+            // On lit ligne par ligne
             while((line = in.readLine()) != null)
             {
+                // Si la ligne contient bien du JSON, on ajoute la ligne
                 if(line.startsWith("{"))
                     this.addStringElement(line);
             }
-            System.out.println(conf.ANSI_GREEN + "Restored " + tweets.size() + " element(s) whit success." + conf.ANSI_RESET);
-            in.close();
+            System.out.println(conf.ANSI_GREEN + "Restored " + tweets.size() + " element(s) with success." + conf.ANSI_RESET);
         }
         catch(FileNotFoundException e)
         {
@@ -154,6 +162,11 @@ class Garbage
         {
             System.out.println(conf.ANSI_RED + "\nAn error occured while restoration, please take a look at the logs.\nRestoration failed !\n" + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
+        }
+        finally
+        {
+            if(in != null)
+                in.close();
         }
     }
 }

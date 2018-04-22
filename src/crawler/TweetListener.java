@@ -38,7 +38,9 @@ class TweetListener implements StatusListener
     */
     public void start()
     {
+        // On ajouter à l'objet Twitter l'instance courante comme Listener de tweets
         twitter.addListener(this);
+        // On démarre la capture
         twitter.filter(conf.FILTER);
         state = true;
     }
@@ -52,24 +54,6 @@ class TweetListener implements StatusListener
         twitter.removeListener(this);
         state = false;
     }
-
-    /**
-    *   Appel la méthode size() du garbage et retourne le nombre de tweet déjà récupérés
-    *   @return le nombre de tweets déjà récupérés
-    */
-    public int getGarbageSize()
-    {
-        return tweets.size();
-    }
-
-    // /**
-    // *   Retourne l'instace de garbage du crawler
-    // *   @return l'instace du garbage
-    // */
-    // public Garbage getGarbage()
-    // {
-    //     return tweets;
-    // }
 
     /**
     *   Retourne l'état du crawler, false pour arrêté et true pour un fonction
@@ -87,6 +71,7 @@ class TweetListener implements StatusListener
     @Override
     public void onStatus(Status status)
     {
+        // On ajoute le tweet seulement si la limite de tweet a été fixée et atteinte
         if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
             tweets.addStatusElement(status);
     }

@@ -34,6 +34,7 @@ public class Crawler extends Thread
         this.state = false;
     }
 
+    @Override
     public void run()
     {
         state = true;
@@ -67,7 +68,7 @@ public class Crawler extends Thread
 
             switch(query)
             {
-                case "index":
+                case "index": //Affiche le nombre total de tweets traite
                 {
                     System.out.println(tweets.index());
                     break;
@@ -82,7 +83,7 @@ public class Crawler extends Thread
                     tweets.save();
                     break;
                 }
-                case "showconf":
+                case "showconf": // Affiche la configuration
                 {
                     System.out.println(conf);
                     break;
@@ -113,12 +114,12 @@ public class Crawler extends Thread
                 }
                 case "size": // Affiche le nombre de tweets capturés
                 {
-                    System.out.println(crawler.getGarbageSize());
+                    System.out.println(tweets.size());
                     break;
                 }
                 case "help": // Affiche la liste des commandes et leurs descriptions
                 {
-                    System.out.println("listcl : list the connected clients\nhelp : show this help\nsave : save the tweets already captured in a output.data file\nshowconf : display the current configuration\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
+                    System.out.println("index : show the total number of tweet parsed\nlistcl : list the connected clients\nhelp : show this help\nsave : save the tweets already captured in a output.data file\nshowconf : display the current configuration\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
                     break;
                 }
                 default:

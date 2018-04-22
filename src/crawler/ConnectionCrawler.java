@@ -34,6 +34,7 @@ class ConnectionCrawler extends Connection
         this.setName("Client-" + id++);
         try
         {
+            // On initialise les flux grace au socket client
             this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(connection.getOutputStream())), true);
         }
@@ -58,25 +59,28 @@ class ConnectionCrawler extends Connection
             String query = "";
             while(state)
             {
+                // On ecoute la requete de l'indexor
                 query = in.readLine();
+                // Si le resultat est null, un probleme de connexion entre le Crawler et l'Indexor est survenu,
+                // on ferme alors la connexion
                 if (query == null)
                 {
-                    System.out.println(conf.ANSI_RED + "Connection this " + this.getName() + " lost." + conf.ANSI_RESET);
+                    System.out.println(conf.ANSI_RED + "Connection lost with " + this.getName() +  conf.ANSI_RESET);
                     close();
                     break;
                 }
                 switch(query)
                 {
-                    case "NEXT":
+                    case "NEXT": // Demande du prochain tweet
                     {
+                        // Appel de la méthode getNextElement de Garbage
                         out.println(tweets.getNextElement());
                         break;
                     }
-                    case "STOP":
+                    case "STOP": // Demande de fin de la communication
                     {
                         System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
                         close();
-                        state = false;
                         break;
                     }
                 }
@@ -84,12 +88,15 @@ class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
+            // L'erreur n'est affichee que si la connexion est ouverte car elle peut etre levee
+            // a l'appel de la methode close a cause de la methode readLine
             if(state)
-                System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                System.out.println(conf.ANSI_RED + "Connection lost with " + this.getName() + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {
+            // On s'assure de femer tous les flux
             close();
         }
     }
@@ -107,7 +114,7 @@ class ConnectionCrawler extends Connection
             {
                 in.close();
                 out.close();
-                if(!connection.isClosed())
+                // if(!connection.isClosed())
                     connection.close();
             }
             catch(IOException e)
