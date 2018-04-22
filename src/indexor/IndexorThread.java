@@ -9,12 +9,9 @@ package indexor;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.Semaphore;
 import com.google.gson.*;
 import common.*;
-
-import java.util.concurrent.locks.*;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.*;
 
 class IndexorThread extends Thread
 {
