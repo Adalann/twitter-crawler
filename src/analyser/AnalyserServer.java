@@ -21,6 +21,10 @@ class AnalyserServer extends Thread
     private ConfigurationAnalyser conf;
     private boolean state;
 
+    /**
+    *   Constructeur de la classe, instancie les attributs
+    *   @param d    Une instance de DataContainer
+    */
     public AnalyserServer(DataContainer d)
     {
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
@@ -31,48 +35,66 @@ class AnalyserServer extends Thread
             this.server = new ServerSocket(conf.PORT);
             this.state = false;
         }
+        catch(BindException e)
+        {
+            System.out.println(conf.ANSI_RED + "Impossible to use the port " + conf.PORT + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
         catch(IOException e)
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
     }
 
+    /**
+    *   Méthode run héritée de Thread, écoute les connexions entrantes et crée les nouvelles Connection
+    */
     @Override
     public void run()
     {
-
         System.out.println(conf.ANSI_GREEN + "Server started." + conf.ANSI_RESET);
-
         state = true;
-        while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
+        if(server != null)
         {
-            try
+            while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
             {
-                ConnectionAnalyser client = new ConnectionAnalyser(server.accept(), dataContainer);
-                clients.add(client);
-                client.start();
-            }
-            catch(IOException e)
-            {
-                if(state)
+                try
                 {
-                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
-                    e.printStackTrace(conf.ERROR_STREAM());
+                    ConnectionAnalyser client = new ConnectionAnalyser(server.accept(), dataContainer);
+                    clients.add(client);
+                    client.start();
+                }
+                catch(IOException e)
+                {
+                    if(state)
+                    {
+                        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
+                        e.printStackTrace(conf.ERROR_STREAM());
+                    }
                 }
             }
         }
+        close();
     }
 
+    /**
+    *   Ferme le socket et toutes les connexions
+    */
     public void close()
     {
-        if(state)
+        if(state) // Si le serveur a bien ete cree
         {
             try
             {
                 for(ConnectionAnalyser c : clients)
-                c.close();
+                    c.close();
                 if(!server.isClosed())
                     server.close();
+            }
+            catch(NullPointerException e)
+            {
+                // Si le serveur etait null
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(IOException e)
             {
@@ -86,12 +108,12 @@ class AnalyserServer extends Thread
         }
     }
 
+    /**
+    *   Affichie la liste des clients
+    */
     public void listClients()
     {
         for(Connection c : clients)
-        {
             System.out.println(c.toString());
-        }
     }
-
 }

@@ -14,6 +14,7 @@ import common.*;
 class ConnectionAnalyser extends Connection
 {
     private static final int CONF_CODE = 2;
+    private static int id = 0;
     private ObjectInputStream in;
     private DataContainer dataContainer;
     private ConfigurationAnalyser conf;
@@ -32,8 +33,10 @@ class ConnectionAnalyser extends Connection
         }
         this.dataContainer = d;
         this.state = false;
+        setName("Client-" + id++);
     }
 
+    @Override
     public void run()
     {
         state = true;
@@ -41,6 +44,7 @@ class ConnectionAnalyser extends Connection
         {
             try
             {
+                // On écoute pour obtenir l'objet tweet
                 Tweet tweet = (Tweet)in.readObject();
                 if(tweet != null)
                     dataContainer.add(tweet);
@@ -52,7 +56,7 @@ class ConnectionAnalyser extends Connection
             }
             catch(SocketException e)
             {
-                System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                System.out.println(conf.ANSI_BLUE + "Connection lost with " + this.getName() + conf.ANSI_RESET);
                 close();
             }
             catch(IOException e)
@@ -75,8 +79,7 @@ class ConnectionAnalyser extends Connection
             try
             {
                 in.close();
-                if(!connection.isClosed())
-                    connection.close();
+                connection.close();
             }
             catch(IOException e)
             {

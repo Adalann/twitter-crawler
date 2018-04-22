@@ -15,12 +15,13 @@ class DataContainer implements Serializable
 {
     private static final int CONF_CODE = 2;
     private static final long serialVersionUID = 50000l;
-    private Map<String, String> retweetCounts; // entrée ID tweet sortie String nombre de RT.
-    private Map<String, List<Url>> urls; // entrée ID tweet sortie String url.
-    private Map<String, List<Hashtag>> hashtags; // entré hastag sortie arraylist des tweets.
-    private Map<String, String> idToNames;  // Entrée Id user sortie pseudo.
-    private Map<String, List<String>> idToTweets; // entrée ID user en sortie arraylist de ses tweets.
-
+    //ID du tweet en cle
+    private Map<String, String> retweetCounts;
+    private Map<String, List<Url>> urls;
+    private Map<String, List<Hashtag>> hashtags;
+    //ID du compte en cle
+    private Map<String, String> idToNames;
+    private Map<String, List<String>> idToTweets;
     private Map<String, List<String>> incomingNeighbors;
     private Map<String, List<String>> outcomingNeighbors;
 
@@ -46,19 +47,20 @@ class DataContainer implements Serializable
 
     public synchronized void add(Tweet t)
     {
-
+        // Si le tweet contient un retweet
         if(t.retweeted_status != null)
         {
             Retweet rt = t.retweeted_status;
+            // Ajout du nombre de retweet
             retweetCounts.put(rt.id_str, "" + rt.retweet_count);
-
+            // Ajout des liens
             urls.put(rt.id_str, new ArrayList<Url>(Arrays.asList(rt.entities.urls)));
-
+            // Ajout des hashtags
             hashtags.put(rt.id_str, new ArrayList<Hashtag>(Arrays.asList(rt.entities.hashtags)));
-
+            // Ajout du pseudo s'il est inconnu
             if(!idToNames.containsKey(rt.user.id_str))
                 idToNames.put(rt.user.id_str, rt.user.screen_name);
-
+            // Ajout du tweet dans la liste des tweets de l'utilisateur
             List<String> listTweet = idToTweets.get(rt.user.id_str);
             if(listTweet != null && listTweet.indexOf(rt.id_str) == -1)
             {
@@ -66,6 +68,7 @@ class DataContainer implements Serializable
             }
         }
 
+        // De même si le tweet contient un tweet cite
         if(t.quoted_status != null)
         {
             QuotedTweet qt = t.quoted_status;
@@ -85,49 +88,52 @@ class DataContainer implements Serializable
             }
         }
 
-        // Ajout Retweet
+        // Ajout du nombre de retweet
         retweetCounts.put(t.id_str, "" + t.retweet_count);
 
-        if(t.retweeted_status != null)
+        if(t.retweeted_status != null) // Un lien entre deux users existe
         {
             // incomingNeighbors
+            // On ajoute le tweet aux incomingNeighbors de l'utilisateur
             if(incomingNeighbors.containsKey(t.retweeted_status.user.id_str))
                 incomingNeighbors.get(t.retweeted_status.user.id_str).add(t.user.id_str);
             else
             {
+                // On cree une entree dans la Hashtable si c'est le premier
                 List<String> l = new ArrayList<String>();
                 l.add(t.user.id_str);
                 incomingNeighbors.put(t.retweeted_status.user.id_str, l);
             }
 
             // outcomingNeighbors
+            // On ajoute le tweet aux outcomingNeighbors de l'utilisateur
             if(outcomingNeighbors.containsKey(t.user.id_str))
                 outcomingNeighbors.get(t.user.id_str).add(t.retweeted_status.user.id_str);
             else
             {
+                // On cree une entree dans la Hashtable si c'est le premier
                 List<String> l = new ArrayList<String>();
                 l.add(t.retweeted_status.user.id_str);
                 outcomingNeighbors.put(t.user.id_str, l);
             }
         }
 
-        // urlExt
+        // On ajoute les urls
         urls.put(t.id_str, new ArrayList<Url>(Arrays.asList(t.entities.urls)));
 
-        // hashtag
+        // On ajoute les hashtags
         hashtags.put(t.id_str, new ArrayList<Hashtag>(Arrays.asList(t.entities.hashtags)));
 
-        // idToName
+        // On ajoute le pseudo de l'utilisateur
         if(!idToNames.containsKey(t.user.id_str))
             idToNames.put(t.user.id_str, t.user.screen_name);
 
-        // idToTweets
+        // On ajoute ce tweet a la liste de tweet de l'utilisateur
         if(idToTweets.containsKey(t.user.id_str))
-        {
             idToTweets.get(t.user.id_str).add(t.id_str);
-        }
         else
         {
+            // On cree une entree dans la Hashtable si c'est le premier
             List<String> l = new ArrayList<String>();
             l.add(t.id_str);
             idToTweets.put(t.user.id_str, l);
@@ -179,7 +185,9 @@ class DataContainer implements Serializable
         ConfigurationAnalyser conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         try
         {
+            // On cree le flux pour serialiser
             ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("../" + conf.SAVEFILE_NAME));
+            // On ecrit l'objet
             saveStream.writeObject(this);
             System.out.println(conf.ANSI_GREEN + "Successfully saved dataContainer !" + conf.ANSI_RESET);
         }
@@ -196,8 +204,11 @@ class DataContainer implements Serializable
         System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");
         try
         {
+            // On cree le flux pour lire le fichier de sauvegarde
             ObjectInputStream restoreStream = new ObjectInputStream(new FileInputStream("../" + conf.RESTOREFILE_NAME));
+            // On cree le nouvel object
             DataContainer restoredObject = (DataContainer)restoreStream.readObject();
+            // On restaure les Hashtables depuis restoredObject
             if(restoredObject != null)
             {
                 this.retweetCounts = new HashMap<String, String>(restoredObject.retweetCounts);

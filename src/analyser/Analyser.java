@@ -30,7 +30,7 @@ public class Analyser extends Thread
         this.conf = (ConfigurationAnalyser)ConfigFactory.getConf(CONF_CODE);
         this.dataContainer = new DataContainer();
         this.server = new AnalyserServer(dataContainer);
-        this.hits = new HITS(dataContainer, 10);
+        this.hits = new HITS(dataContainer);
         this.sc = new Scanner(System.in);
         this.state = false;
     }
@@ -38,6 +38,7 @@ public class Analyser extends Thread
     /**
     *   Méthode run du la classe Thread, contient la boucle pour l'interface qui lit les commandes de l'utilisateur
     */
+    @Override
     public void run()
     {
         state = true;
@@ -61,7 +62,12 @@ public class Analyser extends Thread
             {
                 case "help":
                 {
-                    System.out.println();
+                    System.out.println("authresults : generate auth-sorted results\n" +
+                                       "hubresults : generate hub-sorted results\n" +
+                                       "help : show this help\n" +
+                                       "savedata : save dataContainer\n" +
+                                       "start : launch HITS\n" +
+                                       "stop : close this application");
                     break;
                 }
                 case "authresults":
@@ -98,6 +104,9 @@ public class Analyser extends Thread
         }
     }
 
+    /**
+    *   Stop tous les Threads
+    */
     public void shutdow()
     {
         server.close();
