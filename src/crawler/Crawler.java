@@ -32,6 +32,7 @@ public class Crawler extends Thread
         this.sc = new Scanner(System.in);
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.state = false;
+        setName("Crawler");
     }
 
     @Override

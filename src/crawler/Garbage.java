@@ -62,7 +62,8 @@ class Garbage
     */
     public synchronized void addStatusCollection(List<Status> c)
     {
-        tweets.addAll(DataObjectFactory.getRawJSON(status).replaceAll("\n", " "));
+        for(Status status : c)
+            tweets.add(DataObjectFactory.getRawJSON(status).replaceAll("\n", " "));
     }
 
     /**
@@ -166,7 +167,17 @@ class Garbage
         finally
         {
             if(in != null)
-                in.close();
+            {
+                try
+                {
+                    in.close();
+                }
+                catch(IOException e)
+                {
+                    System.out.println(conf.ANSI_RED + "\nAn error occured while restoration, please take a look at the logs.\nRestoration failed !\n" + conf.ANSI_RESET);
+                    e.printStackTrace(conf.ERROR_STREAM());
+                }
+            }
         }
     }
 }

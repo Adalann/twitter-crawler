@@ -37,10 +37,16 @@ class CrawlerServer extends Thread
             this.garbage = g;
             this.state = false;
         }
+        catch(BindException e)
+        {
+            System.out.println(conf.ANSI_RED + "Impossible to use the port " + conf.PORT + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
+        }
         catch(IOException e)
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
+        setName("CrawlerServer");
     }
 
     /**
@@ -51,20 +57,25 @@ class CrawlerServer extends Thread
     public void run()
     {
         state = true;
-        while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
+        if(server != null) // Si le serveur a bien ete cree
         {
-            try
+            // On boucle tant que la limite de client n'a pas ete atteinte, si elle a ete definie
+            while(state && (conf.CLIENT_LIMIT == -1 || (conf.CLIENT_LIMIT != -1 && clients.size() < conf.CLIENT_LIMIT)))
             {
-                ConnectionCrawler c = new ConnectionCrawler(server.accept(), garbage);
-                clients.add(c);
-                c.start();
-            }
-            catch(IOException e)
-            {
-                // A tester
-                if(state)
+                try
+                {
+                    Socket s = server.accept();
+                    ConnectionCrawler c = new ConnectionCrawler(s, garbage);
+                    clients.add(c);
+                    c.start();
+                }
+                catch(IOException e)
+                {
+                    // A tester
+                    if(state)
                     System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
-                e.printStackTrace(conf.ERROR_STREAM());
+                    e.printStackTrace(conf.ERROR_STREAM());
+                }
             }
         }
         close();
@@ -86,6 +97,11 @@ class CrawlerServer extends Thread
                 }
                 if(!server.isClosed())
                     server.close();
+            }
+            catch(NullPointerException e)
+            {
+                // Si le serveur etait null
+                e.printStackTrace(conf.ERROR_STREAM());
             }
             catch(IOException e)
             {
