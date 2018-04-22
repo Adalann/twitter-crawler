@@ -37,7 +37,7 @@ public class Indexor extends Thread
             thread.start();
 
         // Test de syncronisation
-        
+
         // synchronized(this)
         // {
         //     while(!isReady())
@@ -83,15 +83,15 @@ public class Indexor extends Thread
         }
     }
 
-    public boolean isReady()
-    {
-        boolean res = true;
-        int i = 0;
-        while(i < indexorThreads.size() && res == true)
-            res = indexorThreads.get(i).state();
-
-        return res;
-    }
+    // public boolean isReady()
+    // {
+    //     boolean res = true;
+    //     int i = 0;
+    //     while(i < indexorThreads.size() && res == true)
+    //         res = indexorThreads.get(i).state();
+    //
+    //     return res;
+    // }
 
     public void shutdown()
     {
