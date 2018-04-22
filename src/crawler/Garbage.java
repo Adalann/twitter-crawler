@@ -35,6 +35,7 @@ class Garbage
 
     /**
     *   Méthode pour ajouter une entrée de type String dans la liste.
+    *   @param e L'élement à ajouter
     */
     public synchronized void addStringElement(String e)
     {
@@ -43,6 +44,7 @@ class Garbage
 
     /**
     *   Méthode pour ajouter un entrée de type Status dans la liste de tweets.
+    *   @param e L'élement à ajouter
     */
     public synchronized void addStatusElement(Status e)
     {
@@ -51,6 +53,7 @@ class Garbage
 
     /**
     *   Méthode pour ajouter une liste de String dans la liste de tweets.
+    *   @param c La collection à ajouter
     */
     public synchronized void addStringCollection(List<String> c)
     {
@@ -59,6 +62,7 @@ class Garbage
 
     /**
     *   Méthode pour ajouter une liste de Status dans la liste de tweets.
+    *   @param c La collection à ajouter
     */
     public synchronized void addStatusCollection(List<Status> c)
     {
@@ -108,7 +112,7 @@ class Garbage
     }
 
     /**
-    *   Méthode pour sauvegarder les tweets stockés dans le Garbage dans un fichier output.data
+    *   Méthode pour sauvegarder les tweets stockés dans le Garbage dans un fichier
     */
     public synchronized void save()
     {
@@ -136,6 +140,9 @@ class Garbage
         }
     }
 
+    /**
+    *   Méthode pour restaurer les données
+    */
     public synchronized void restore()
     {
         System.out.println("Restoration from " + conf.RESTOREFILE_NAME + "...");

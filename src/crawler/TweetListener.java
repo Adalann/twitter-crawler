@@ -34,7 +34,6 @@ class TweetListener implements StatusListener
 
     /**
     *   Démarre le crawler avec le filtre passé en paramètre
-    *   @param f   Le filtre à appliquer pour la récupération des tweets
     */
     public void start()
     {

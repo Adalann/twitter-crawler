@@ -35,6 +35,9 @@ public class Crawler extends Thread
         setName("Crawler");
     }
 
+    /**
+    *   Démarre les Threads et gère l'IU
+    */
     @Override
     public void run()
     {
@@ -139,6 +142,9 @@ public class Crawler extends Thread
         }
     }
 
+    /**
+    *   Stop tous les Threads
+    */
     public void shutdown()
     {
         if(state)
