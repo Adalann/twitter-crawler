@@ -2,6 +2,31 @@
 __author__ = "Theo Martos"
 
 import os
+import getpass
+from shutil import copyfile
+
+if not os.path.exists('bin'):
+    print("Creating bin directory...")
+    os.mkdir('bin')
+
+if not os.path.exists('crawlerConf.json'):
+    print("Copying default configuration file")
+    copyfile("example/crawlerConfExample.json", "crawlerConf.json")
+
+if not os.path.exists("bin/twitter4j.properties"):
+    print("No 'twitter4j.properties' found, creating one")
+    with open("bin/twitter4j.properties", 'w') as file:
+        consumerKey = getpass.getpass("consumerKey : ")
+        consumerSecret = getpass.getpass("consumerSecret : ")
+        accessToken = getpass.getpass("accessToken : ")
+        accessTokenSecret = getpass.getpass("accessTokenSecret : ")
+        file.write("debug = false\n")
+        file.write("jsonStoreEnabled = true\n")
+        file.write("#Creds\n")
+        file.write("oauth.consumerKey = {}\n".format(consumerKey))
+        file.write("oauth.consumerSecret = {}\n".format(consumerSecret))
+        file.write("oauth.accessToken = {}\n".format(accessToken))
+        file.write("oauth.accessTokenSecret = {}\n".format(accessTokenSecret))
 
 print("Compiling...")
 res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar:./src ./src/RunCrawler.java")

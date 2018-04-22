@@ -14,8 +14,8 @@ import com.google.gson.stream.JsonReader;
 
 public class ConfigFactory
 {
-    private static String[] CONF_PATH_TABLE = {"crawler/crawlerConf.json", "indexor/indexorConf.json", "analyser/analyserConf.json"};
-    private static Configuration confInstance = null;
+    private static String[] CONF_PATH_TABLE = {"../crawlerConf.json", "../indexorConf.json", "../analyserConf.json"};
+    private static Configuration confInstance = null; // Evite de recréer l'instance de configuration et assure que toutes les classes utilisent la même configuration
 
     public static Configuration getConf(int conf_code)
     {
@@ -29,11 +29,13 @@ public class ConfigFactory
             }
             catch(FileNotFoundException e)
             {
+                System.out.println("Configuration file not found !");
                 e.printStackTrace();
             }
             Configuration conf = null;
             switch(conf_code)
             {
+                // La méthode fromJson de la librairie permet de créer une instance en passant en paramètre le JsonReader et la classe désirée
                 case 0:
                 {
                     conf = gson.fromJson(reader, ConfigurationCrawler.class);
@@ -50,9 +52,8 @@ public class ConfigFactory
                     break;
                 }
             }
-            return conf;
+            confInstance = conf;
         }
-        else
-            return confInstance;
+        return confInstance;
     }
 }

@@ -14,6 +14,7 @@ import common.*;
 class ConnectionAnalyser extends Connection
 {
     private static final int CONF_CODE = 2;
+    private static int id = 0;
     private ObjectInputStream in;
     private DataContainer dataContainer;
     private ConfigurationAnalyser conf;
@@ -32,8 +33,10 @@ class ConnectionAnalyser extends Connection
         }
         this.dataContainer = d;
         this.state = false;
+        setName("Client-" + id++);
     }
 
+    @Override
     public void run()
     {
         state = true;
@@ -41,16 +44,29 @@ class ConnectionAnalyser extends Connection
         {
             try
             {
+                // On écoute pour obtenir l'objet tweet
                 Tweet tweet = (Tweet)in.readObject();
                 if(tweet != null)
                     dataContainer.add(tweet);
             }
-            catch(ClassNotFoundException e)
+            catch(EOFException e)
             {
-                e.printStackTrace(conf.ERROR_STREAM());
+                System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                close();
+            }
+            catch(SocketException e)
+            {
+                System.out.println(conf.ANSI_BLUE + "Connection lost with " + this.getName() + conf.ANSI_RESET);
+                close();
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
+                e.printStackTrace(conf.ERROR_STREAM());
+            }
+            catch(ClassNotFoundException e)
+            {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
         }
@@ -63,11 +79,11 @@ class ConnectionAnalyser extends Connection
             try
             {
                 in.close();
-                if(!connection.isClosed())
-                    connection.close();
+                connection.close();
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
             }
             finally

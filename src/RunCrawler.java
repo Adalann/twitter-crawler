@@ -2,7 +2,7 @@
 *   @author Theo Martos
 *   @author Jules Perret
 *
-*   Classe Principale de l'analyser
+*   Classe Principale du crawler
 **/
 
 import crawler.*;

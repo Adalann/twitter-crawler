@@ -10,73 +10,43 @@ package indexor;
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import twitter4j.*;
-import indexor.*;
 import common.*;
 
 public class Indexor extends Thread
 {
     private static final int CONF_CODE = 1;
-    private static int nbInstance = 0;
-    private ConfigurationIndexor conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
-    private IndexorThread indexorThread;
-    private Socket connectionCrawler;
-    private Socket connectionAnalyser;
-    //private "object qui gère le buffer"
+    private ConfigurationIndexor conf;
+    private List<IndexorThread> indexorThreads;
     private boolean state;
-    private boolean quiet;
     private Scanner sc;
 
-    public Indexor(boolean quiet)
-    {
-        try
-        {
-            this.connectionCrawler = new Socket(conf.HOSTNAME_CRAWLER, conf.PORT_CRAWLER);
-            System.out.println(conf.ANSI_GREEN + "Connection to the crawler established." + conf.ANSI_RESET);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-            System.out.println(conf.ANSI_RED + "Impossible to reach the crawler, check your connection and your configuration" + conf.ANSI_RESET);
-            this.connectionCrawler = null;
-        }
-
-        try
-        {
-            this.connectionAnalyser = new Socket(conf.HOSTNAME_ANALYSER, conf.PORT_ANALYSER);
-            System.out.println(conf.ANSI_GREEN + "Connection to the analyser established." + conf.ANSI_RESET);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(conf.ERROR_STREAM());
-            System.out.println(conf.ANSI_RED + "Impossible to reach the analyser, check your connection and your configuration" + conf.ANSI_RESET);
-            this.connectionAnalyser = null;
-        }
-
-        this.indexorThread = new IndexorThread(connectionCrawler, connectionAnalyser);
-        this.state = false;
-        this.sc = new Scanner(System.in);
-        this.quiet = quiet;
-    }
-
+    /**
+    *   Constructeur de la classe, initialise les attributs et génère les Threads de traitement
+    */
     public Indexor()
     {
-        this(false);
+        this.conf = (ConfigurationIndexor)ConfigFactory.getConf(CONF_CODE);
+        this.indexorThreads = new ArrayList<IndexorThread>();
+        for(int i = 0; i < conf.THREAD_NUMBER; i++)
+            indexorThreads.add(new IndexorThread());
+        this.state = false;
+        this.sc = new Scanner(System.in);
+        setName("Indexor");
     }
 
+    /**
+    *   Méthode run du la classe Thread, contient la boucle pour l'interface qui lit les commandes de l'utilisateur
+    */
     public void run()
     {
         state = true;
-        indexorThread.start();
+        // On demarre les Threads crees
+        for(IndexorThread thread : indexorThreads)
+            thread.start();
+
         String query = "";
         while(state)
         {
-            if(connectionCrawler.isClosed())
-            {
-                state = false;
-                break;
-            }
-
             System.out.print("> ");
             query = sc.nextLine();
             switch(query)
@@ -88,12 +58,12 @@ public class Indexor extends Thread
                 }
                 case "index":  //  Affiche le nombre de tweets traités
                 {
-                    System.out.println(indexorThread.getIndex());
+                    System.out.println(IndexorThread.getIndex());
                     break;
                 }
                 case "stop":  //  Stop le module
                 {
-                    stopIndexor();
+                    shutdown();
                     break;
                 }
                 default:
@@ -104,26 +74,16 @@ public class Indexor extends Thread
         }
     }
 
-    public void stopIndexor()
+    /**
+    *   Stop tous les Threads
+    */
+    public void shutdown()
     {
         if(state)
         {
-            try
-            {
-                if(!connectionCrawler.isClosed())
-                    connectionCrawler.close();
-                if(!connectionAnalyser.isClosed())
-                    connectionAnalyser.close();
-            }
-            catch(IOException e)
-            {
-                System.out.println("Error trying to close the sockets.");
-                e.printStackTrace(conf.ERROR_STREAM());
-            }
-            finally
-            {
-                state = false;
-            }
+            for(IndexorThread thread : indexorThreads)
+                thread.close();
+            state = false;
         }
     }
 }

@@ -1,6 +1,0 @@
-{
-    "HOSTNAME_CRAWLER" : "adalannvps.fr",
-    "PORT_CRAWLER" : 2200,
-    "HOSTNAME_ANALYSER" : "adalannvps.fr",
-    "PORT_ANALYSER" : 2201
-}

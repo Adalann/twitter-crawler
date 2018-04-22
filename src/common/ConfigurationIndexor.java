@@ -15,13 +15,15 @@ public class ConfigurationIndexor extends Configuration
     public final int PORT_CRAWLER;
     public final String HOSTNAME_ANALYSER;
     public final int PORT_ANALYSER;
+    public final int THREAD_NUMBER;
 
     public ConfigurationIndexor()
     {
-        this.HOSTNAME_CRAWLER = "";
-        this.PORT_CRAWLER = -1;
-        this.HOSTNAME_ANALYSER = "";
-        this.PORT_ANALYSER = -1;
+        this.HOSTNAME_CRAWLER = "localhost";
+        this.PORT_CRAWLER = 2200;
+        this.HOSTNAME_ANALYSER = "localhost";
+        this.PORT_ANALYSER = 2201;
+        this.THREAD_NUMBER = 1;
         if(ERROR_STREAM == null)
         {
             try

@@ -1,7 +1,7 @@
 {
     "PORT" : 2200,
     "CLIENT_LIMIT" : -1,
-    "FILTER" : "#DiaInternacionalDelBeso",
+    "FILTER" : "#DiaDeLaTierra",
     "TWEET_LIMIT" : 7000,
     "SAVEFILE_NAME" : "output.data",
     "RESTOREFILE_NAME" : "test.data",

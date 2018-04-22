@@ -9,9 +9,6 @@
 package crawler;
 
 import java.util.*;
-import java.io.*;
-import java.net.*;
-import twitter4j.*;
 import common.*;
 
 public class Crawler extends Thread
@@ -24,6 +21,9 @@ public class Crawler extends Thread
     private ConfigurationCrawler conf;
     private boolean state;
 
+    /**
+    *   Constructeur de la classe qui initialise les Threads ainsi que le Scanner et la configuration
+    */
     public Crawler()
     {
         this.tweets = new Garbage();
@@ -32,16 +32,21 @@ public class Crawler extends Thread
         this.sc = new Scanner(System.in);
         this.conf = (ConfigurationCrawler)ConfigFactory.getConf(CONF_CODE);
         this.state = false;
+        setName("Crawler");
     }
 
+    /**
+    *   Démarre les Threads et gère l'IU
+    */
+    @Override
     public void run()
     {
         state = true;
 
         // Démarrage du Thread crawler
         System.out.println("Starting the crawler...");
-        crawler.start(conf.FILTER);
-        System.out.println("Crawler started !");
+        crawler.start();
+        System.out.println(conf.ANSI_GREEN + "Crawler started !" + conf.ANSI_RESET);
 
         // Temporisation pour une raison d'interface
         try
@@ -50,13 +55,14 @@ public class Crawler extends Thread
         }
         catch(InterruptedException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
 
         // Démarrage du serveur qui gère les connexions des modules indexeurs
         System.out.println("Starting the server...");
         server.start();
-        System.out.println("Server started !");
+        System.out.println(conf.ANSI_GREEN + "Server started !" + conf.ANSI_RESET);
 
         // Boucle pour l'interface console
         while(state)
@@ -66,6 +72,11 @@ public class Crawler extends Thread
 
             switch(query)
             {
+                case "index": //Affiche le nombre total de tweets traite
+                {
+                    System.out.println(tweets.index());
+                    break;
+                }
                 case "listcl": // Affiche la liste des clients
                 {
                     server.listClients();
@@ -76,15 +87,21 @@ public class Crawler extends Thread
                     tweets.save();
                     break;
                 }
-                case "startc": // Démarre le crawler avec le filtre définit plus haut
+                case "showconf": // Affiche la configuration
                 {
-                    crawler.start(conf.FILTER);
+                    System.out.println(conf);
+                    break;
+                }
+                case "startc": // Démarre le crawler avec le filtre définit dans le fichier de configuration
+                {
+                    crawler.start();
                     try
                     {
                         Thread.sleep(5000);
                     }
                     catch(InterruptedException e)
                     {
+                        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                         e.printStackTrace(conf.ERROR_STREAM());
                     }
                     break;
@@ -101,12 +118,20 @@ public class Crawler extends Thread
                 }
                 case "size": // Affiche le nombre de tweets capturés
                 {
-                    System.out.println(crawler.getGarbageSize());
+                    System.out.println(tweets.size());
                     break;
                 }
                 case "help": // Affiche la liste des commandes et leurs descriptions
                 {
-                    System.out.println("help : show this help\nsave : save the tweets already captured in a output.data file\nsize : print the number of tweets captured so far\nstartc : start the crawler\nstopc : stop the crawler\nstop : stop the application and save the data");
+                    System.out.println("index : show the total number of tweet parsed\n" +
+                                       "listcl : list the connected clients\n" +
+                                       "help : show this help\n" +
+                                       "save : save the tweets already captured in a '" + conf.SAVEFILE_NAME + "' file\n" +
+                                       "showconf : display the current configuration\n" +
+                                       "size : print the number of tweets captured so far\n" +
+                                       "startc : start the crawler\n" +
+                                       "stopc : stop the crawler\n" +
+                                       "stop : stop the application and save the data");
                     break;
                 }
                 default:
@@ -117,10 +142,14 @@ public class Crawler extends Thread
         }
     }
 
+    /**
+    *   Stop tous les Threads
+    */
     public void shutdown()
     {
         if(state)
         {
+            tweets.save();
             crawler.stop();
             sc.close();
             server.close();

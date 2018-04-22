@@ -2,11 +2,20 @@
 __author__ = "Theo Martos"
 
 import os
+from shutil import copyfile
+
+if not os.path.exists('bin'):
+    print("Creating bin directory...")
+    os.mkdir('bin')
+
+if not os.path.exists('indexorConf.json'):
+    print("Copying default configuration file")
+    copyfile("example/indexorConfExample.json", "indexorConf.json")
 
 print("Compiling...")
-res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/gson.jar:./src ./src/RunIndexor.java")
+res = os.system("javac -d ./bin -cp :./lib/gson.jar:./src ./src/RunIndexor.java")
 if(res == 0):
     print("Starting...")
-    os.system("cd ./bin && java -cp :../lib/twitter4j.jar:../lib/gson.jar:../src RunIndexor")
+    os.system("cd ./bin && java -cp :../lib/gson.jar:../src RunIndexor")
 else:
     print('Compilation failed, start aborded')

@@ -1,7 +1,8 @@
 {
     "PORT" : 2201,
     "CLIENT_LIMIT" : -1,
+    "HITS_REPETITION" : 10,
     "SAVEFILE_NAME" : "save.data",
-    "RESTOREFILE_NAME" : "test.data",
+    "RESTOREFILE_NAME" : "restore.data",
     "RESTORE_ON_START" : false
 }

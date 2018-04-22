@@ -34,12 +34,13 @@ class TweetListener implements StatusListener
 
     /**
     *   Démarre le crawler avec le filtre passé en paramètre
-    *   @param f   Le filtre à appliquer pour la récupération des tweets
     */
-    public void start(String f)
+    public void start()
     {
-        this.twitter.addListener(this);
-        this.twitter.filter(f);
+        // On ajouter à l'objet Twitter l'instance courante comme Listener de tweets
+        twitter.addListener(this);
+        // On démarre la capture
+        twitter.filter(conf.FILTER);
         state = true;
     }
 
@@ -48,29 +49,9 @@ class TweetListener implements StatusListener
     */
     public void stop()
     {
-        this.twitter.shutdown();
-        this.twitter.removeListener(this);
+        twitter.shutdown();
+        twitter.removeListener(this);
         state = false;
-        System.out.println(conf.ANSI_GREEN + "Done, wrote data (" + tweets.size() + " tweets)" + conf.ANSI_RESET);
-        tweets.save();
-    }
-
-    /**
-    *   Appel la méthode size() du garbage et retourne le nombre de tweet déjà récupérés
-    *   @return le nombre de tweets déjà récupérés
-    */
-    public int getGarbageSize()
-    {
-        return this.tweets.size();
-    }
-
-    /**
-    *   Retourne l'instace de garbage du crawler
-    *   @return l'instace du garbage
-    */
-    public Garbage getGarbage()
-    {
-        return this.tweets;
     }
 
     /**
@@ -89,11 +70,9 @@ class TweetListener implements StatusListener
     @Override
     public void onStatus(Status status)
     {
-        // synchronized(tweets)
-        // {
+        // On ajoute le tweet seulement si la limite de tweet a été fixée et atteinte
         if((conf.TWEET_LIMIT != -1 && tweets.size() < conf.TWEET_LIMIT) || conf.TWEET_LIMIT == -1)
-            this.tweets.addStatusElement(status);
-        // }
+            tweets.addStatusElement(status);
     }
 
     /**
@@ -114,6 +93,7 @@ class TweetListener implements StatusListener
     @Override
     public void onException(Exception ex)
     {
+        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
         ex.printStackTrace(conf.ERROR_STREAM());
     }
 }

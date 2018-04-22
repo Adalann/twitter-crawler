@@ -22,7 +22,7 @@ class ConnectionCrawler extends Connection
     private static int id = 0;
 
     /**
-    *   Constructeur de la classe qui initialise le sockect, les flux réseaux et le garbage.
+    *   Constructeur de la classe qui initialise le socket, les flux réseaux et le garbage.
     *   @param s    Le socket issu de la connexion avec le sokect serveur.
     *   @param g    Le gargabe qui stocke les tweets
     */
@@ -34,11 +34,13 @@ class ConnectionCrawler extends Connection
         this.setName("Client-" + id++);
         try
         {
+            // On initialise les flux grace au socket client
             this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(connection.getOutputStream())), true);
         }
         catch(IOException e)
         {
+            System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
             e.printStackTrace(conf.ERROR_STREAM());
         }
         this.state = false;
@@ -51,29 +53,34 @@ class ConnectionCrawler extends Connection
     @Override
     public void run()
     {
-        this.state = true;
+        state = true;
         try
         {
             String query = "";
             while(state)
             {
+                // On ecoute la requete de l'indexor
                 query = in.readLine();
+                // Si le resultat est null, un probleme de connexion entre le Crawler et l'Indexor est survenu,
+                // on ferme alors la connexion
                 if (query == null)
                 {
-                    System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                    System.out.println(conf.ANSI_RED + "Connection lost with " + this.getName() +  conf.ANSI_RESET);
                     close();
                     break;
                 }
                 switch(query)
                 {
-                    case "NEXT":
+                    case "NEXT": // Demande du prochain tweet
                     {
+                        // Appel de la méthode getNextElement de Garbage
                         out.println(tweets.getNextElement());
                         break;
                     }
-                    case "STOP":
+                    case "STOP": // Demande de fin de la communication
                     {
-                        state = false;
+                        System.out.println(conf.ANSI_BLUE + "Connection close by " + this.getName() + conf.ANSI_RESET);
+                        close();
                         break;
                     }
                 }
@@ -81,11 +88,15 @@ class ConnectionCrawler extends Connection
         }
         catch(IOException e)
         {
+            // L'erreur n'est affichee que si la connexion est ouverte car elle peut etre levee
+            // a l'appel de la methode close a cause de la methode readLine
             if(state)
-                e.printStackTrace(conf.ERROR_STREAM());
+                System.out.println(conf.ANSI_RED + "Connection lost with " + this.getName() + conf.ANSI_RESET);
+            e.printStackTrace(conf.ERROR_STREAM());
         }
         finally
         {
+            // On s'assure de femer tous les flux
             close();
         }
     }
@@ -98,20 +109,18 @@ class ConnectionCrawler extends Connection
     {
         if(state)
         {
+            state = false;
             try
             {
                 in.close();
                 out.close();
-                if(!connection.isClosed())
+                // if(!connection.isClosed())
                     connection.close();
             }
             catch(IOException e)
             {
+                System.out.println(conf.ANSI_RED + "Connection close by " + this.getName() + conf.ANSI_RESET);
                 e.printStackTrace(conf.ERROR_STREAM());
-            }
-            finally
-            {
-                state = false;
             }
         }
     }
@@ -122,7 +131,7 @@ class ConnectionCrawler extends Connection
     @Override
     public String toString()
     {
-        return this.getName() + " " + connection.toString();
+        return this.getName() + " => " + connection.toString();
     }
 
 }

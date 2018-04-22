@@ -1,7 +1,6 @@
 # Compiled source #
 ###################
 *.class
-output.data
 
 # OS generated files #
 ######################
@@ -17,10 +16,13 @@ Thumbs.db
 ###################################
 twitter4j.properties
 
-# Atom files #
+# Project files #
 ##############
+*.data
 .ropeproject
 src.old
-.ftpconfig
-.ftpconfig-vps
-.ftpconfig-pi
+.ftpconfig*
+error*
+analyserConf.json
+crawlerConf.json
+indexorConf.json

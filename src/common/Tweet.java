@@ -12,15 +12,15 @@ import java.io.Serializable;
 public class Tweet implements Serializable
 {
     private static final long serialVersionUID = 40000l;
-    public final String id_str;
-    public final User user;
-    public final String text;
-    public final Entities entities;
-    public final String created_at;
-    public final Retweet retweeted_status;
-    public final int retweet_count;
-    public final QuotedTweet quoted_status;
-    public final int quote_count;
+    public final String id_str;                // l'id du tweet
+    public final User user;                    // son auteur
+    public final String text;                  // son texte
+    public final Entities entities;            // les hashtags et urls
+    public final String created_at;            // la date de creation
+    public final Retweet retweeted_status;     // le tweet retweete
+    public final int retweet_count;            // le nombre de rewteet
+    public final QuotedTweet quoted_status;    // le tweet cite
+    public final int quote_count;              // le nombre de citation
 
     public Tweet()
     {
