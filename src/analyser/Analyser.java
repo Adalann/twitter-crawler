@@ -33,6 +33,7 @@ public class Analyser extends Thread
         this.hits = new HITS(dataContainer);
         this.sc = new Scanner(System.in);
         this.state = false;
+        setName("Analyser");
     }
 
     /**

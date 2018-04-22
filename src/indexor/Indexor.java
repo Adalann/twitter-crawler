@@ -31,6 +31,7 @@ public class Indexor extends Thread
             indexorThreads.add(new IndexorThread());
         this.state = false;
         this.sc = new Scanner(System.in);
+        setName("Indexor");
     }
 
     /**

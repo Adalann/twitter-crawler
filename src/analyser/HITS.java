@@ -28,6 +28,7 @@ class HITS extends Thread
         this.data = d;
         this.users = new ArrayList<UserHITS>();
         this.compareMode = false;
+        setName("HITS");
     }
 
     /**

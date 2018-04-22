@@ -44,6 +44,7 @@ class AnalyserServer extends Thread
         {
             e.printStackTrace(conf.ERROR_STREAM());
         }
+        setName("AnalyserServer");
     }
 
     /**
