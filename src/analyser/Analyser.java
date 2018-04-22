@@ -47,7 +47,7 @@ public class Analyser extends Thread
 
         try
         {
-            Thread.sleep(5); // Temporisation pour raison d'affichage
+            Thread.sleep(10); // Temporisation pour raison d'affichage
         }
         catch(InterruptedException e)
         {

@@ -1,7 +1,6 @@
 # Compiled source #
 ###################
 *.class
-output.data
 
 # OS generated files #
 ######################
@@ -19,7 +18,11 @@ twitter4j.properties
 
 # Project files #
 ##############
+*.data
 .ropeproject
 src.old
 .ftpconfig*
 error*
+analyserConf.json
+crawlerConf.json
+indexorConf.json

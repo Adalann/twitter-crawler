@@ -2,10 +2,15 @@
 __author__ = "Theo Martos"
 
 import os
+from shutil import copyfile
 
-if not os.path.exists('bin'):
+if not os.path.exists("bin"):
     print("Creating bin directory...")
-    os.mkdir('bin')
+    os.mkdir("bin")
+
+if not os.path.exists('analyserConf.json'):
+    print("Copying default configuration file")
+    copyfile("example/analyserConfExample.json", "analyserConf.json")
 
 print("Compiling...")
 res = os.system("javac -d ./bin -cp :./lib/gson.jar:./src ./src/RunAnalyser.java")
