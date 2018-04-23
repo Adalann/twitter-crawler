@@ -26,33 +26,34 @@ public class ConfigFactory
             try
             {
                 reader = new JsonReader(new FileReader(CONF_PATH_TABLE[conf_code]));
+                Configuration conf = null;
+                switch(conf_code)
+                {
+                    // La méthode fromJson de la librairie permet de créer une instance en passant en paramètre le JsonReader et la classe désirée
+                    case 0:
+                    {
+                        conf = gson.fromJson(reader, ConfigurationCrawler.class);
+                        break;
+                    }
+                    case 1:
+                    {
+                        conf = gson.fromJson(reader, ConfigurationIndexor.class);
+                        break;
+                    }
+                    case 2:
+                    {
+                        conf = gson.fromJson(reader, ConfigurationAnalyser.class);
+                        break;
+                    }
+                }
+
+                confInstance = conf;
             }
             catch(FileNotFoundException e)
             {
                 System.out.println("Configuration file not found !");
                 e.printStackTrace();
             }
-            Configuration conf = null;
-            switch(conf_code)
-            {
-                // La méthode fromJson de la librairie permet de créer une instance en passant en paramètre le JsonReader et la classe désirée
-                case 0:
-                {
-                    conf = gson.fromJson(reader, ConfigurationCrawler.class);
-                    break;
-                }
-                case 1:
-                {
-                    conf = gson.fromJson(reader, ConfigurationIndexor.class);
-                    break;
-                }
-                case 2:
-                {
-                    conf = gson.fromJson(reader, ConfigurationAnalyser.class);
-                    break;
-                }
-            }
-            confInstance = conf;
         }
         return confInstance;
     }

@@ -90,10 +90,10 @@ class Garbage
     public synchronized String getNextElement()
     {
         String r = "";
-        if(index < tweets.size())
-            r = tweets.get(index++);
-        else if(conf.TWEET_LIMIT != -1 && index >= conf.TWEET_LIMIT)
+        if(conf.TWEET_LIMIT != -1 && index >= conf.TWEET_LIMIT)
             r = "STOP";
+        else if(index < tweets.size())
+            r = tweets.get(index++);
         return r;
     }
 
