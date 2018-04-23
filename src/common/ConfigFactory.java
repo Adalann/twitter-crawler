@@ -14,7 +14,7 @@ import com.google.gson.stream.JsonReader;
 
 public class ConfigFactory
 {
-    private static String[] CONF_PATH_TABLE = {"../crawlerConf.json", "../indexorConf.json", "../analyserConf.json"};
+    private static final String[] CONF_PATH_TABLE = {"../crawlerConf.json", "../indexorConf.json", "../analyserConf.json"};
     private static Configuration confInstance = null; // Evite de recréer l'instance de configuration et assure que toutes les classes utilisent la même configuration
 
     public static Configuration getConf(int conf_code)

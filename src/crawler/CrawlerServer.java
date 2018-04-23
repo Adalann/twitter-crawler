@@ -71,9 +71,8 @@ class CrawlerServer extends Thread
                 }
                 catch(IOException e)
                 {
-                    // A tester
                     if(state)
-                    System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
+                        System.out.println(conf.ANSI_RED + "An error occured, please check the last log file." + conf.ANSI_RESET);
                     e.printStackTrace(conf.ERROR_STREAM());
                 }
             }
