@@ -15,11 +15,11 @@ if not os.path.exists('crawlerConf.json'):
 
 if not os.path.exists("bin/twitter4j.properties"):
     print("No 'twitter4j.properties' found, creating one")
+    consumerKey = getpass.getpass("consumerKey : ")
+    consumerSecret = getpass.getpass("consumerSecret : ")
+    accessToken = getpass.getpass("accessToken : ")
+    accessTokenSecret = getpass.getpass("accessTokenSecret : ")
     with open("bin/twitter4j.properties", 'w') as file:
-        consumerKey = getpass.getpass("consumerKey : ")
-        consumerSecret = getpass.getpass("consumerSecret : ")
-        accessToken = getpass.getpass("accessToken : ")
-        accessTokenSecret = getpass.getpass("accessTokenSecret : ")
         file.write("debug = false\n")
         file.write("jsonStoreEnabled = true\n")
         file.write("#Creds\n")
