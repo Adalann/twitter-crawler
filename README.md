@@ -12,7 +12,7 @@ At this point the crawler is working and you just have to run the startAnalyser 
 
 ## Licence
 
-We are using for this project the Twitter4J library, licensed under the Apache License, Version 2.0, Copyright 2007 Yusuke Yamamoto without any modification (http://twitter4j.org/en/index.html) and the ON library too, licensed under the Apache License, Version 2.0, Copyright 2008 Google Inc without any modification (https://github.com/google/gson).
+We are using for this project the Twitter4J library, licensed under the Apache License, Version 2.0, Copyright 2007 Yusuke Yamamoto without any modification (http://twitter4j.org/en/index.html) and the GSON library too, licensed under the Apache License, Version 2.0, Copyright 2008 Google Inc without any modification (https://github.com/google/gson).
 
 This program is published under the [Apache 2.0 license](LICENSE).
 
