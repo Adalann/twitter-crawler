@@ -20,13 +20,14 @@ if not os.path.exists("bin/twitter4j.properties"):
     accessToken = getpass.getpass("accessToken : ")
     accessTokenSecret = getpass.getpass("accessTokenSecret : ")
     with open("bin/twitter4j.properties", 'w') as file:
-        file.write("debug = false\n")
-        file.write("jsonStoreEnabled = true\n")
-        file.write("#Creds\n")
-        file.write("oauth.consumerKey = {}\n".format(consumerKey))
-        file.write("oauth.consumerSecret = {}\n".format(consumerSecret))
-        file.write("oauth.accessToken = {}\n".format(accessToken))
-        file.write("oauth.accessTokenSecret = {}\n".format(accessTokenSecret))
+        file.write("debug = false\n
+                    jsonStoreEnabled = true\n
+                    #Creds\n
+                    oauth.consumerKey = {0}\n
+                    oauth.consumerSecret = {1}\n
+                    oauth.accessToken = {2}\n
+                    oauth.accessTokenSecret = {3}\n"
+                    .format(consumerKey, consumerSecret, accessToken, accessTokenSecret))
 
 print("Compiling...")
 res = os.system("javac -d ./bin -cp :./lib/twitter4j.jar:./lib/twitter4j-stream.jar:./lib/gson.jar:./src ./src/RunCrawler.java")
