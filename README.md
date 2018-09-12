@@ -1,6 +1,8 @@
 # twitter-crawler [School Project]
 Tweets capture, storage and analysis
 
+# [Decrepated since Twitter Stream API has been disabled]
+
 This project is a school projet meant to learn and practice concepts of Operating System such as multithreading or network.
 The goal is to create a Java application able to connect on Twitter, capture tweets and apply the HIST algorithm on these data.
 
