@@ -20,13 +20,13 @@ if not os.path.exists("bin/twitter4j.properties"):
     accessToken = getpass.getpass("accessToken : ")
     accessTokenSecret = getpass.getpass("accessTokenSecret : ")
     with open("bin/twitter4j.properties", 'w') as file:
-        file.write("debug = false\n
+        file.write("""debug = false\n
                     jsonStoreEnabled = true\n
                     #Creds\n
                     oauth.consumerKey = {0}\n
                     oauth.consumerSecret = {1}\n
                     oauth.accessToken = {2}\n
-                    oauth.accessTokenSecret = {3}\n"
+                    oauth.accessTokenSecret = {3}\n"""
                     .format(consumerKey, consumerSecret, accessToken, accessTokenSecret))
 
 print("Compiling...")
